@@ -8,16 +8,16 @@ function player:load()
     self.width = 50
     self.speed = 500
 
-    -- Load sprite sheet
-    self.spriteSheet = love.graphics.newImage("slime_idle.png")
+    player:framesLoad("slime_idle.png")
+end
+
+function player:framesLoad(imagePath)
+    self.spriteSheet = love.graphics.newImage(imagePath)
     
     self.frameWidth = 64
     self.frameHeight = 64
-    
-    -- Total number of frames in the sprite sheet
     self.totalFrames = 6
-    
-    -- Create quads for each frame
+
     self.frames = {}
     for i = 0, self.totalFrames - 1 do
         self.frames[i + 1] = love.graphics.newQuad(
@@ -27,7 +27,6 @@ function player:load()
         )
     end
 
-    -- Animation settings
     self.currentFrame = 1
     self.frameDuration = 0.1  -- Time between frames
     self.timePassed = 0
