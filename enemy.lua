@@ -1,3 +1,4 @@
+local sprite = require("sprite")
 enemy = {}
 enemies = {}
 
@@ -6,6 +7,7 @@ function enemy:load()
     self.width = 64
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
+    self.animation = sprite:changeFrames(self.height, self.width, 6, "slime_idle.png")
 end
 
 function enemy:spawn()
@@ -54,6 +56,7 @@ function enemy:update(dt)
     enemy:spawn()
     enemy:move(dt)
     enemy:collision()
+    self.animation:update(dt)
 end
 
 function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2)
@@ -94,6 +97,6 @@ end
 
 function enemy:draw()
     for i, skeleton in ipairs(enemies) do
-        love.graphics.rectangle("fill", skeleton.x, skeleton.y, 64, 64)
+        self.animation:draw(skeleton.x, skeleton.y, self.width, self.height)
     end
 end
