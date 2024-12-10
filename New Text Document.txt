@@ -1,0 +1,41 @@
+
+[[--https://love2d.org/wiki/Tutorial:Callback_Functions
+
+function love.load() --sam k startam game se loada
+    --image = love.graphics.newImage("cake.jpg")
+    love.graphics.setNewFont(12)
+    love.graphics.setColor(0,0,0)
+    love.graphics.setBackgroundColor(255,255,255)
+ end
+
+
+
+ function love.draw() --to zmer sam kle rise nikjer drugje
+    --love.graphics.draw(image, imgx, imgy)
+    love.graphics.print("Click and drag the cake around or use the arrow keys", 10, 10)
+ end
+
+
+ function love.quit() --ko zapres game
+    print("Thanks for playing! Come back soon!")
+  end
+
+
+
+  function love.focus(f)
+    if not f then
+      print("LOST FOCUS")
+      gameIsPaused = true;
+    else
+      print("GAINED FOCUS")
+      gameIsPaused = false;
+    end
+  end
+
+function love.update(dt) --matematika, skoz deluje
+    if love.keyboard.isDown("up") then
+       num = num + 100 * dt -- this would increment num by 100 per second
+    end
+    if gameIsPaused then return end --ce je game paused
+ end
+ --]]
