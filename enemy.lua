@@ -7,7 +7,7 @@ function enemy:load()
     self.width = 64
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
-    self.animation = sprite:changeFrames(self.height, self.width, 6, "slime_idle.png")
+    self.animation = sprite:changeFrames(self.height, self.width, 1, "enemy.png")
 end
 
 function enemy:spawn()
