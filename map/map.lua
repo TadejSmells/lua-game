@@ -8,7 +8,6 @@ function map:createMap(fileName)
         print(self.contents)
     end
     
-    
     function map:update()
         
     end
