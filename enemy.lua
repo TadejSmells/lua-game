@@ -34,7 +34,7 @@ function enemy:spawn()
     end
 end
 
-
+--[[
 function enemy:move(dt)
     local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
     for i = #enemies, 1, -1 do
@@ -51,10 +51,11 @@ function enemy:move(dt)
         end
     end
 end
+]]--
 
 function enemy:update(dt)
     enemy:spawn()
-    enemy:move(dt)
+    --enemy:move(dt)
     enemy:collision()
     self.animation:update(dt)
 end

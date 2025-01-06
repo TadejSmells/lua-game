@@ -1,30 +1,30 @@
-require("player")
+require("players")
 require("tower")
 require("enemy")
-require("shoot")
+--require("shoot")
 
 ScreenHeight = love.graphics.getHeight()
 ScreenWidth = love.graphics.getWidth()
 
 function love.load()
-  player:load()
+  players:load()
   tower:load()
   enemy:load()
-  shoot:load()
+  --shoot:load()
 end
 
 
 function love.update(dt)
-  player:update(dt)
+  players:update(dt)
   tower:update()
   enemy:update(dt)
-  shoot:update(dt)
+  --shoot:update(dt)
 end
 
 
 function love.draw() 
   tower:draw()
   enemy:draw()
-  shoot:draw()
-  player:draw()
+  --shoot:draw()
+  players:draw()
 end
