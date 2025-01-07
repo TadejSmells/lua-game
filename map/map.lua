@@ -5,6 +5,7 @@ function map:createMap(fileName)
         love.graphics.setDefaultFilter("nearest", "nearest")
         self.height = screenHeight
         self.width = screenWidth
+        print(self.width)
         self.grid = {}
         map:loadFromTxt()
 

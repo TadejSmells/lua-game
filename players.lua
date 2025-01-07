@@ -49,6 +49,8 @@ function players:createPlayer(x, y, spriteSheet, controls)
         if self.x < 0 then
             self.x = 0 
         elseif self.x + self.width > ScreenWidth then
+            print(self.x + self.width)
+            print(ScreenWidth)
             self.x = ScreenWidth - self.width
         end
     end
