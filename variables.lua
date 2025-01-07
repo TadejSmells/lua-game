@@ -1,8 +1,8 @@
-ScreenWidth, ScreenHeight = love.graphics.getDimensions() -- Initialize with default dimensions
+--love.window.setFullscreen(true, "exclusive")
+ScreenWidth, ScreenHeight = love.graphics.getDimensions()
 
 function love.resize(w, h)
     ScreenWidth, ScreenHeight = w, h
-    print("Window resized to:", ScreenWidth, ScreenHeight)
 end
 
 baseTileSize = 32
