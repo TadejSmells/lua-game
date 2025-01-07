@@ -2,10 +2,9 @@ require("players")
 require("tower")
 require("enemy")
 require("map.loadmap")
+require("variables")
 --require("shoot")
 
-ScreenHeight = love.graphics.getHeight()
-ScreenWidth = love.graphics.getWidth()
 
 function love.load()
   players:load()

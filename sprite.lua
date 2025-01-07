@@ -35,7 +35,7 @@ function sprite:changeFrames(frameWidth, frameHeight, totalFrames, imagePath)
             self.frames[self.currentFrame],
             x, y,
             0, 
-            width / self.frameWidth, height / self.frameHeight
+            math.floor(width / self.frameWidth), math.floor(height / self.frameHeight)
         )
     end
 

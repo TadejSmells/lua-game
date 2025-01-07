@@ -3,8 +3,8 @@ enemy = {}
 enemies = {}
 
 function enemy:load()
-    self.height = 64
-    self.width = 64
+    self.height = spriteHeight
+    self.width = spriteWidth
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
     self.animation = sprite:changeFrames(self.height, self.width, 1, "enemy.png")

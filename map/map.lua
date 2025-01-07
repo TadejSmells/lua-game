@@ -2,18 +2,21 @@ map = {}
 
 function map:createMap(fileName)
     function map:load()
+        love.graphics.setDefaultFilter("nearest", "nearest")
         self.height = screenHeight
         self.width = screenWidth
         self.grid = {}
         map:loadFromTxt()
 
-        self.tileSize = 32
+        self.tileSize = tileSize
+        self.baseTileSize = baseTileSize
         self.tileset = love.graphics.newImage("map/map-layouts/map-tiles.png")
         self.tiles = {}
+        self.tileRatio = ratio
 
         for i = 0, 5 do
             self.tiles[i] = love.graphics.newQuad(
-                i * self.tileSize, 0 , self.tileSize, self.tileSize, self.tileset:getDimensions()
+                i * self.baseTileSize, 0 , self.baseTileSize, self.baseTileSize, self.tileset:getDimensions()
             )
         end
     end
@@ -21,7 +24,7 @@ function map:createMap(fileName)
     -- load map from txt
     function map:loadFromTxt()
         local contents, size = love.filesystem.read(fileName)
-        print(contents)
+        --print(contents)
         if not contents then
             error("Failed to load map file: " .. fileName)
         end
@@ -52,7 +55,7 @@ function map:createMap(fileName)
             for x, tile in ipairs(row) do
                 local quad = self.tiles[tile]
                 if quad then
-                    love.graphics.draw(self.tileset, quad, (x - 1) * self.tileSize, (y - 1) * self.tileSize)
+                    love.graphics.draw(self.tileset, quad, math.floor((x - 1) * self.tileSize), math.floor((y - 1) * self.tileSize), 0, self.tileRatio, self.tileRatio)
                 end
             end
         end

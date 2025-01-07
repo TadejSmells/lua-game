@@ -6,14 +6,16 @@ function players:createPlayer(x, y, spriteSheet, controls)
     local player = {}
 
     function player:load()
+        love.graphics.setDefaultFilter("nearest", "nearest")
         position_of_player_in_room = 1
         self.x = ScreenWidth / 2
         self.y = ScreenHeight / 2
-        self.height = 64
-        self.width = 64
+        self.height = spriteHeight
+        
+        self.width = spriteWidth
         self.speed = 500
         self.controls = controls
-        self.animation = sprite:changeFrames(64, 64, 6, spriteSheet)
+        self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
     end
 
     function player:update(dt)
