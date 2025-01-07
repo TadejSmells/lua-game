@@ -25,10 +25,11 @@ function love.update(dt)
 end
 
 
-function love.draw() 
+function love.draw()
+  loadmap:draw()
   tower:draw()
   enemy:draw()
   --shoot:draw()
   players:draw()
-  loadmap:draw()
+  
 end
