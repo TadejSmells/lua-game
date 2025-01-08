@@ -2,6 +2,8 @@
 love.window.setMode(1280, 720, {fullscreen = false})
 --love.window.setMode(1920, 1080, {fullscreen = false})
 
+gameState = "menu"
+
 
 ScreenWidth, ScreenHeight = love.graphics.getDimensions()
 

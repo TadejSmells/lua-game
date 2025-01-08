@@ -6,21 +6,23 @@ function menu:load()
 end
 
 function menu:update(dt)
-    function love.keypressed(key, scancode, isrepeat)
-        if key == "up" then
-            menu.selected = menu.selected - 1
-            if menu.selected < 1 then menu.selected = #menu.options end
-        elseif key == "down" then
-            menu.selected = menu.selected + 1
-            if menu.selected > #menu.options then menu.selected = 1 end
-        elseif key == "return" then
-            if menu.selected == 1 then
-                gameState = "playing"
-            elseif menu.selected == 2 then
-                gameState = "settings"
-            elseif menu.selected == 3 then
-                love.event.quit()
-            end
+
+end
+
+function love.keypressed(key, scancode, isrepeat)
+    if key == "up" then
+        menu.selected = menu.selected - 1
+        if menu.selected < 1 then menu.selected = #menu.options end
+    elseif key == "down" then
+        menu.selected = menu.selected + 1
+        if menu.selected > #menu.options then menu.selected = 1 end
+    elseif key == "return" then
+        if menu.selected == 1 then
+            gameState = "playing"
+        elseif menu.selected == 2 then
+            gameState = "settings"
+        elseif menu.selected == 3 then
+            love.event.quit()
         end
     end
 end
