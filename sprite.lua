@@ -35,7 +35,7 @@ function sprite:changeFrames(frameWidth, frameHeight, totalFrames, imagePath)
             self.frames[self.currentFrame],
             x, y,
             0, 
-            math.floor(width / self.frameWidth), math.floor(height / self.frameHeight)
+            ratio, ratio -- ratio for hitbox draw
         )
     end
 

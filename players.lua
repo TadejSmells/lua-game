@@ -11,8 +11,8 @@ function players:createPlayer(x, y, spriteSheet, controls)
         self.x = ScreenWidth / 2
         self.y = ScreenHeight / 2
         self.height = spriteHeight
-        
         self.width = spriteWidth
+        
         self.speed = 500
         self.controls = controls
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
