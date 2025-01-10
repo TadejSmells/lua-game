@@ -2,7 +2,25 @@
 love.window.setMode(1280, 720, {fullscreen = false})
 --love.window.setMode(1920, 1080, {fullscreen = false})
 
+keybinds = {
+    menu = {
+        up = "up",
+        down = "down",
+        select = "return"
+    },
+    settings = {
+        back = "return"
+    }
+}
+
+activeKeybinds = keybinds.menu
+
 gameState = "menu"
+
+menu = {
+    selected = 1,
+    options = {"Start Game", "Settings", "Quit"}
+}
 
 
 ScreenWidth, ScreenHeight = love.graphics.getDimensions()
