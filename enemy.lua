@@ -10,6 +10,8 @@ function enemy:load()
     self.animation = sprite:changeFrames(self.height, self.width, 1, "enemy.png")
 end
 
+--[[
+
 function enemy:spawn()
     if love.keyboard.isDown("h") then 
         local skeleton = {}
@@ -34,7 +36,7 @@ function enemy:spawn()
     end
 end
 
---[[
+
 function enemy:move(dt)
     local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
     for i = #enemies, 1, -1 do
@@ -54,7 +56,7 @@ end
 ]]--
 
 function enemy:update(dt)
-    enemy:spawn()
+    --enemy:spawn()
     --enemy:move(dt)
     enemy:collision()
     self.animation:update(dt)
