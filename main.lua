@@ -22,7 +22,6 @@ end
 
 function love.update(dt)
   if gameState == "menu" then
-    print("menu")
       menu:update(dt)
   elseif gameState == "settings" then
       settings:update(dt)
