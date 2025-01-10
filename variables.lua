@@ -14,13 +14,8 @@ keybinds = {
 }
 
 activeKeybinds = keybinds.menu
-
 gameState = "menu"
 
-menu = {
-    selected = 1,
-    options = {"Start Game", "Settings", "Quit"}
-}
 
 
 ScreenWidth, ScreenHeight = love.graphics.getDimensions()

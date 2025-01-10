@@ -9,6 +9,7 @@ function menu:update(dt)
 
 end
 
+
 function menu:draw()
     love.graphics.printf("Main Menu", 0, 100, love.graphics.getWidth(), "center")
     for i, option in ipairs(self.options) do
