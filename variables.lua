@@ -1,6 +1,6 @@
 --love.window.setFullscreen(true, "exclusive")
 love.window.setMode(1280, 720, {fullscreen = false})
---love.window.setMode(1920, 1080, {fullscreen = false})
+love.window.setMode(1024,576, {fullscreen = false})
 
 keybinds = {
     menu = {
@@ -27,9 +27,7 @@ baseTileSize = 32
 local baseSpriteHeight = 42
 local baseSpriteWidth = 42
 
-ratio = ScreenWidth / ScreenHeight
-
-tileSize = math.floor(baseTileSize * ratio)
+ratio = math.min(ScreenWidth / renderScreenWidth, ScreenHeight / renderScreenHeight)
 
 print(ratio)
 

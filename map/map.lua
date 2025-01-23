@@ -1,15 +1,18 @@
 map = {}
-
 function map:createMap(fileName)
     function map:load()
         love.graphics.setDefaultFilter("nearest", "nearest")
-        self.height = screenHeight
-        self.width = screenWidth
+
         print(self.width)
         self.grid = {}
+        self.spawnPoints = {}
         map:loadFromTxt()
+        local gridWidth = #self.grid[1]
+        local gridHeight = #self.grid
+        tileSize = math.min(ScreenWidth / gridWidth, ScreenHeight / gridHeight)
 
-        self.tileSize = tileSize
+        self.width = gridWidth * tileSize
+        self.height = gridHeight * tileSize
         self.baseTileSize = baseTileSize
         self.tileset = love.graphics.newImage("map/map-layouts/map-tiles.png")
         self.tiles = {}
@@ -17,46 +20,56 @@ function map:createMap(fileName)
 
         for i = 0, 5 do
             self.tiles[i] = love.graphics.newQuad(
-                i * self.baseTileSize, 0 , self.baseTileSize, self.baseTileSize, self.tileset:getDimensions()
+                i * self.baseTileSize, 0, self.baseTileSize, self.baseTileSize, self.tileset:getDimensions()
             )
         end
     end
-    
-    -- load map from txt
+
+    -- Load map from txt
     function map:loadFromTxt()
         local contents, size = love.filesystem.read(fileName)
-        --print(contents)
         if not contents then
             error("Failed to load map file: " .. fileName)
         end
-    
+
         local rows = contents:split("\n")
         for y, row in ipairs(rows) do
             self.grid[y] = {}
-            for x, tile in ipairs(row:split(",")) do 
-                self.grid[y][x] = tonumber(tile)
+            for x, tile in ipairs(row:split(",")) do
+                local tileNumber = tonumber(tile)
+                self.grid[y][x] = tileNumber
+                if tileNumber == 99 then
+                    -- Store spawn points as {x, y}
+                    table.insert(self.spawnPoints, {x = x, y = y})
+                end
             end
         end
     end
 
-    -- seperate different tile numbers based on spaces and ,
+    -- Split function for strings
     function string:split(sep)
         local fields = {}
         self:gsub("([^" .. sep .. "]+)", function(c) fields[#fields + 1] = c end)
         return fields
     end
 
-
     function map:update(dt)
-        
+        -- Add enemy movement or other updates here
     end
-    
+
     function map:draw()
         for y, row in ipairs(self.grid) do
             for x, tile in ipairs(row) do
-                local quad = self.tiles[tile]
+                local renderTile = tile
+                if tile == 99 then
+                    renderTile = 0
+                end
+    
+                local quad = self.tiles[renderTile]
                 if quad then
-                    love.graphics.draw(self.tileset, quad, math.floor((x - 1) * self.tileSize), math.floor((y - 1) * self.tileSize), 0, self.tileRatio, self.tileRatio)
+                    local drawX = (x - 1) * tileSize
+                    local drawY = (y - 1) * tileSize
+                    love.graphics.draw(self.tileset, quad, drawX, drawY, 0, tileSize / baseTileSize, tileSize / baseTileSize)
                 end
             end
         end
