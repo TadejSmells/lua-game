@@ -18,7 +18,7 @@ function map:createMap(fileName)
         self.tiles = {}
         self.tileRatio = ratio
 
-        for i = 0, 5 do
+        for i = 0, 9 do
             self.tiles[i] = love.graphics.newQuad(
                 i * self.baseTileSize, 0, self.baseTileSize, self.baseTileSize, self.tileset:getDimensions()
             )
