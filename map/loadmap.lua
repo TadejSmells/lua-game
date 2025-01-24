@@ -4,8 +4,12 @@ loadmap = {}
 
 function loadmap:load()
     local map1 = map:createMap("map/map-layouts/map1.txt")
+    self.chosenMap = chosenMap
     map1:load()
-    table.insert(loadmap, map1)
+    if(self.chosenMap == 1) then
+        table.insert(loadmap, map1)
+        
+    end
     --[[
     local map2 = map:createMap("map/map-layouts/map2.txt")
     map2:load()

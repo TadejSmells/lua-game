@@ -10,6 +10,13 @@ keybinds = {
     },
     settings = {
         back = "return"
+    },
+
+    pauseMenu = {
+        up = "up",
+        down = "down",
+        select = "return",
+        pause = "escape"
     }
 }
 
@@ -26,6 +33,8 @@ local renderScreenHeight = 720
 baseTileSize = 32
 local baseSpriteHeight = 42
 local baseSpriteWidth = 42
+chosenMap = 1
+isPaused = false
 
 ratio = math.min(ScreenWidth / renderScreenWidth, ScreenHeight / renderScreenHeight)
 
