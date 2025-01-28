@@ -7,7 +7,19 @@ function enemy:load()
     self.width = spriteWidth
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
-    self.animation = sprite:changeFrames(self.height, self.width, 1, "enemy.png")
+    self.animation = sprite:changeFrames(44, 30, 1, "enemy.png")
+end
+
+function enemy:spawn(spawnPoints)
+    local skeleton = {}
+        skeleton.speed = 100
+        skeleton.health = 3
+        local firstSpawnPoint = spawnPoints[1]
+        skeleton.x = firstSpawnPoint.x
+        skeleton.y = firstSpawnPoint.y + tileSize
+        
+        table.insert(enemies, skeleton)
+        print("enemy spawned")
 end
 
 --[[
@@ -55,10 +67,108 @@ function enemy:move(dt)
 end
 ]]--
 
-function enemy:update(dt)
+function enemy:move(dt, map)
+    local targetX = math.floor(#map.grid[1] / 2) 
+    local targetY = math.floor(#map.grid / 2) 
+    
+    for i = #enemies, 1, -1 do
+        local enemyL = enemies[i]
+        local gridX = math.floor(enemyL.x / tileSize) + 1
+        local gridY = math.floor(enemyL.y / tileSize) + 1
+
+        if not enemyL.path or #enemyL.path == 0 then
+            enemyL.path = self:findPath(gridX, gridY, targetX, targetY, map)
+        end
+
+        if enemyL.path and #enemyL.path > 0 then
+            local nextStep = enemyL.path[1] 
+            local targetPixelX = (nextStep.x - 1) * tileSize
+            local targetPixelY = (nextStep.y - 1) * tileSize
+
+            local dx = targetPixelX - enemyL.x
+            local dy = targetPixelY - enemyL.y
+            local distance = math.sqrt(dx * dx + dy * dy)
+
+            if distance > 0 then
+                local moveX = (dx / distance) * enemyL.speed * dt
+                local moveY = (dy / distance) * enemyL.speed * dt
+
+                if math.abs(moveX) > math.abs(dx) then moveX = dx end
+                if math.abs(moveY) > math.abs(dy) then moveY = dy end
+
+                enemyL.x = enemyL.x + moveX
+                enemyL.y = enemyL.y + moveY
+            end
+
+            if math.abs(dx) < 1 and math.abs(dy) < 1 then
+                table.remove(enemyL.path, 1)
+            end
+        end
+    end
+end
+
+
+function enemy:findPath(startX, startY, targetX, targetY, map)
+    local openSet = {{x = startX, y = startY, cost = 0, estimate = 0}}
+    local cameFrom = {}
+    local gScore = {}
+    local fScore = {}
+
+    local function key(x, y) return x .. "," .. y end
+    local function heuristic(x1, y1, x2, y2)
+        return math.abs(x1 - x2) + math.abs(y1 - y2) -- Manhattan distance
+    end
+
+    gScore[key(startX, startY)] = 0
+    fScore[key(startX, startY)] = heuristic(startX, startY, targetX, targetY)
+
+    while #openSet > 0 do
+        -- Find node with lowest fScore
+        table.sort(openSet, function(a, b) return a.estimate < b.estimate end)
+        local current = table.remove(openSet, 1)
+        local cx, cy = current.x, current.y
+
+        -- If target is reached
+        if cx == targetX and cy == targetY then
+            local path = {}
+            while cameFrom[key(cx, cy)] do
+                table.insert(path, 1, {x = cx, y = cy})
+                cx, cy = cameFrom[key(cx, cy)].x, cameFrom[key(cx, cy)].y
+            end
+            return path
+        end
+
+        -- Check neighbors
+        local directions = {
+            {dx = -1, dy = 0}, -- Left
+            {dx = 1, dy = 0},  -- Right
+            {dx = 0, dy = -1}, -- Up
+            {dx = 0, dy = 1},  -- Down
+        }
+
+        for _, dir in ipairs(directions) do
+            local nx, ny = cx + dir.dx, cy + dir.dy
+            if map.grid[ny] and map.grid[ny][nx] == 0 then
+                local tentative_gScore = gScore[key(cx, cy)] + 1
+                if tentative_gScore < (gScore[key(nx, ny)] or math.huge) then
+                    cameFrom[key(nx, ny)] = {x = cx, y = cy}
+                    gScore[key(nx, ny)] = tentative_gScore
+                    fScore[key(nx, ny)] = tentative_gScore + heuristic(nx, ny, targetX, targetY)
+                    table.insert(openSet, {x = nx, y = ny, cost = tentative_gScore, estimate = fScore[key(nx, ny)]})
+                end
+            end
+        end
+    end
+
+    return nil -- No path found
+end
+
+
+function enemy:update(dt, map)
     --enemy:spawn()
-    --enemy:move(dt)
-    enemy:collision()
+    enemy:move(dt, map)
+
+    --enemy:collision()
     self.animation:update(dt)
 end
 

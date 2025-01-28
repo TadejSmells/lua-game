@@ -3,7 +3,6 @@ function map:createMap(fileName)
     function map:load()
         love.graphics.setDefaultFilter("nearest", "nearest")
 
-        print(self.width)
         self.grid = {}
         self.spawnPoints = {}
         map:loadFromTxt()
@@ -46,7 +45,6 @@ function map:createMap(fileName)
         end
     end
 
-    -- Split function for strings
     function string:split(sep)
         local fields = {}
         self:gsub("([^" .. sep .. "]+)", function(c) fields[#fields + 1] = c end)
@@ -54,7 +52,7 @@ function map:createMap(fileName)
     end
 
     function map:update(dt)
-        -- Add enemy movement or other updates here
+        
     end
 
     function map:draw()

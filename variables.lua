@@ -1,6 +1,6 @@
 --love.window.setFullscreen(true, "exclusive")
 love.window.setMode(1280, 720, {fullscreen = false})
-love.window.setMode(1024,576, {fullscreen = false})
+--love.window.setMode(1024,576, {fullscreen = false})
 
 keybinds = {
     menu = {

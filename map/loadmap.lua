@@ -1,4 +1,5 @@
 require("map.map")
+require("enemy")
 loadmap = {}
 
 
@@ -8,7 +9,7 @@ function loadmap:load()
     map1:load()
     if(self.chosenMap == 1) then
         table.insert(loadmap, map1)
-        
+        enemy:spawn(map.spawnPoints)
     end
     --[[
     local map2 = map:createMap("map/map-layouts/map2.txt")
