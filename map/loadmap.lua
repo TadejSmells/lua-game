@@ -9,7 +9,7 @@ function loadmap:load()
     map1:load()
     if(self.chosenMap == 1) then
         table.insert(loadmap, map1)
-        enemy:spawn(map.spawnPoints)
+        local 
     end
     --[[
     local map2 = map:createMap("map/map-layouts/map2.txt")
@@ -19,6 +19,10 @@ end
 
 
 function loadmap:update(dt)
+    if(self.chosenMap == 1) then
+        local currentTime = os.time()
+        enemy:spawn(map.spawnPoints)
+    end
     for _, map in ipairs(loadmap) do
         map:update(dt)
     end
