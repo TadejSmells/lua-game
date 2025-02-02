@@ -67,7 +67,7 @@ function enemy:move(dt)
 end
 ]]--
 
-function enemy:move(dt, map)
+function enemy:move(dt, map, enemyInfo)
     local targetX = math.floor(#map.grid[1] / 2) 
     local targetY = math.floor(#map.grid / 2) 
     
