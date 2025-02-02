@@ -3,26 +3,54 @@ require("enemy")
 loadmap = {}
 
 
+
 function loadmap:load()
-    local map1 = map:createMap("map/map-layouts/map1.txt")
+
     self.chosenMap = chosenMap
-    map1:load()
-    if(self.chosenMap == 1) then
-        table.insert(loadmap, map1)
-        local 
+    local map1 = map:createMap("map/map-layouts/map" .. self.chosenMap .. ".txt")
+    
+    self.spawnData = {} 
+
+
+    self.spawnSettings = {
+        [1] = { 
+            { enemyType = "goblin", spawnInterval = 3, spawnNumber = 5 },
+            { enemyType = "orc", spawnInterval = 5, spawnNumber = 3 }
+        },
+        [2] = { 
+            { enemyType = "skeleton", spawnInterval = 4, spawnNumber = 6 },
+            { enemyType = "zombie", spawnInterval = 2, spawnNumber = 8 }
+        }
+    }
+
+    if self.spawnSettings[self.chosenMap] then
+        for _, enemyInfo in ipairs(self.spawnSettings[self.chosenMap]) do
+            self.spawnData[enemyInfo.enemyType] = {
+                spawnTimer = 0,
+                spawnCount = 0,
+                spawnInterval = enemyInfo.spawnInterval,
+                spawnNumber = enemyInfo.spawnNumber
+            }
+        end
     end
-    --[[
-    local map2 = map:createMap("map/map-layouts/map2.txt")
-    map2:load()
-    table.insert(loadmap, map2)]]--
+    map1:load()
 end
 
 
 function loadmap:update(dt)
-    if(self.chosenMap == 1) then
-        local currentTime = os.time()
-        enemy:spawn(map.spawnPoints)
+    if not self.chosenMap or not self.spawnData then return end
+
+    for enemyType, data in pairs(self.spawnData) do
+        if data.spawnCount < data.spawnNumber then
+            data.spawnTimer = data.spawnTimer + dt
+            if data.spawnTimer >= data.spawnInterval then
+                enemy:spawn(map.spawnPoints, enemyType) -- Pass enemy type
+                data.spawnTimer = 0
+                data.spawnCount = data.spawnCount + 1
+            end
+        end
     end
+    
     for _, map in ipairs(loadmap) do
         map:update(dt)
     end
