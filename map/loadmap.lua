@@ -9,14 +9,18 @@ function loadmap:load()
 
     self.currentWave = 1
     self.spawnTimer = 0
-    self.waveActive = false
+    self.waveActive = false 
     self.waveCooldown = 5
     self.waveTimer = 0
 
     self.spawnSettings = {
         [1] = {
             { waveNumber = 1, spawnInterval = 1, enemies = { goblin = 5, orc = 3 } },
-            { waveNumber = 2, spawnInterval = 1, enemies = { goblin = 10, orc = 5 } }
+            { waveNumber = 2, spawnInterval = 1, enemies = { goblin = 10, orc = 5 } },
+            { waveNumber = 3, spawnInterval = 0.9, enemies = { goblin = 8, orc = 6 } },
+            { waveNumber = 4, spawnInterval = 0.9, enemies = { goblin = 9, orc = 4 } },
+            { waveNumber = 5, spawnInterval = 0.8, enemies = { goblin = 10, orc = 6 } },
+            { waveNumber = 6, spawnInterval = 1, enemies = { goblin = 20, orc = 15 } }
         },
         [2] = {
             { waveNumber = 1, spawnInterval = 3, enemies = { skeleton = 6, zombie = 8 } },
@@ -51,7 +55,6 @@ function loadmap:update(dt)
                 end
             end
 
-            -- Check if wave is complete
             local waveComplete = true
             for _, count in pairs(self.remainingEnemies) do
                 if count > 0 then
@@ -68,7 +71,6 @@ function loadmap:update(dt)
     else
         self.waveTimer = math.max(0, self.waveTimer - dt)
 
-        -- ✅ Prevent the wave counter from going above the max waves
         local totalWaves = #self.spawnSettings[self.chosenMap]
         if self.waveTimer == 0 and self.currentWave < totalWaves then
             self.currentWave = self.currentWave + 1

@@ -18,15 +18,17 @@ function enemy:spawn(spawnPoints)
     skeleton.speed = 100
     skeleton.health = 3
     local firstSpawnPoint = spawnPoints[1]
-    skeleton.x = firstSpawnPoint.x
-    skeleton.y = firstSpawnPoint.y + tileSize
+    print(firstSpawnPoint.x)
+    print(firstSpawnPoint.y)
+    skeleton.x = (firstSpawnPoint.x-1) * tileSize
+    skeleton.y = (firstSpawnPoint.y-1) * tileSize
 
     -- Assign enemy width and height
     skeleton.width = self.width
     skeleton.height = self.height
 
     table.insert(enemies, skeleton)
-    print("Enemy spawned")
+    --print("Enemy spawned")
 end
 
 
@@ -203,9 +205,9 @@ function enemy:collision()
 
                 if skeleton.health <= 0 then
                     table.remove(enemies, i)
-                    print("Enemy killed")
+                    --print("Enemy killed")
                 else
-                    print("Enemy hit! Remaining health:", skeleton.health)
+                    --print("Enemy hit! Remaining health:", skeleton.health)
                 end
                 break
             end
