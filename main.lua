@@ -8,7 +8,7 @@ require("starting-screen.menu")
 require("starting-screen.settings")
 require("pauseMenu")
 require("map.map")
---require("shoot")
+require("shoot")
 
 
 function love.load()
@@ -19,7 +19,7 @@ function love.load()
     tower:load()
     enemy:load()
     pauseMenu:load()
-    --shoot:load()
+    shoot:load()
 end
 
 function love.update(dt)
@@ -31,9 +31,9 @@ function love.update(dt)
         if not isPaused then 
             players:update(dt)
             tower:update()
-            enemy:update(dt, map)
+            enemy:update(dt, map, enemyType)
             loadmap:update(dt)
-            --shoot:update(dt)
+            shoot:update(dt)
         end
     end
 end
@@ -48,7 +48,7 @@ function love.draw()
             loadmap:draw()
             tower:draw()
             enemy:draw()
-            --shoot:draw()
+            shoot:draw()
             players:draw()
         else
             loadmap:draw()

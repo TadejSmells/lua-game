@@ -1,6 +1,9 @@
-require("player")
-shoot = {}
-bullets = {}
+require("players")
+
+shoot = {
+    bullets = {},
+    down = false
+}
 
 -- Load the shooter
 function shoot:load()
@@ -10,31 +13,35 @@ end
 function love.mousepressed(x, y, button, istouch, presses)
     if button == 1 then
         shoot.down = true
-        shoot:fire(x, y)
+        -- Use the first player (players[1]) for now. Change if needed.
+        if players[1] then
+            shoot:fire(players[1], x, y)
+        end
     end
 end
 
-function shoot:fire(targetX, targetY)
+function shoot:fire(player, targetX, targetY)
     local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
-    
-    -- Ustvari metek ki gre proti miški
-    local bullet = {}
-    bullet.x = playerX + (playerWidth / 2)
-    bullet.y = playerY + (playerHeight / 2)
-    
-    -- izračunaj smer metka
+
+    -- Create a bullet that moves towards the mouse position
+    local bullet = {
+        x = playerX + (playerWidth / 2),
+        y = playerY + (playerHeight / 2),
+        speed = 300
+    }
+
+    -- Calculate bullet direction
     local directionX = targetX - bullet.x
     local directionY = targetY - bullet.y
     local length = math.sqrt(directionX^2 + directionY^2)
 
     bullet.dirX = directionX / length
     bullet.dirY = directionY / length
-    
-    bullet.speed = 300  -- Bullet speed
-    table.insert(bullets, bullet)  -- Store the bullet in the bullets table
+
+    -- Store the bullet in the bullets table
+    table.insert(self.bullets, bullet)
 end
 
--- When the mouse is released, stop firing (if needed)
 function love.mousereleased(x, y, button, istouch, presses)
     if button == 1 then
         shoot.down = false
@@ -42,28 +49,25 @@ function love.mousereleased(x, y, button, istouch, presses)
 end
 
 function shoot:update(dt)
-    -- Screen dimensions
     local screenWidth = love.graphics.getWidth()
     local screenHeight = love.graphics.getHeight()
 
-    -- Iterate through bullets in reverse to remove off-screen or collided bullets
-    for i = #bullets, 1, -1 do
-        local bullet = bullets[i]
-        
-        -- Update bullet position
+    for i = #self.bullets, 1, -1 do
+        local bullet = self.bullets[i]
+
+        -- Move bullet
         bullet.x = bullet.x + bullet.dirX * bullet.speed * dt
         bullet.y = bullet.y + bullet.dirY * bullet.speed * dt
-        
-        -- Remove bullet if it goes off the screen
+
+        -- Remove bullet if it goes off-screen
         if bullet.x < 0 or bullet.x > screenWidth or bullet.y < 0 or bullet.y > screenHeight then
-            table.remove(bullets, i)
+            table.remove(self.bullets, i)
         end
     end
 end
 
--- Draw the bullets
 function shoot:draw()
-    for i, bullet in ipairs(bullets) do
-        love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 5)  -- Draw the bullet
+    for _, bullet in ipairs(self.bullets) do
+        love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 5)  -- Draw bullet
     end
 end

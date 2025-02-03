@@ -1,6 +1,9 @@
+require("shoot")
+
 local sprite = require("sprite")
 enemy = {}
 enemies = {}
+
 
 function enemy:load()
     self.height = spriteHeight
@@ -12,15 +15,20 @@ end
 
 function enemy:spawn(spawnPoints)
     local skeleton = {}
-        skeleton.speed = 100
-        skeleton.health = 3
-        local firstSpawnPoint = spawnPoints[1]
-        skeleton.x = firstSpawnPoint.x
-        skeleton.y = firstSpawnPoint.y + tileSize
-        
-        table.insert(enemies, skeleton)
-        print("enemy spawned")
+    skeleton.speed = 100
+    skeleton.health = 3
+    local firstSpawnPoint = spawnPoints[1]
+    skeleton.x = firstSpawnPoint.x
+    skeleton.y = firstSpawnPoint.y + tileSize
+
+    -- Assign enemy width and height
+    skeleton.width = self.width
+    skeleton.height = self.height
+
+    table.insert(enemies, skeleton)
+    print("Enemy spawned")
 end
+
 
 --[[
 
@@ -168,7 +176,7 @@ function enemy:update(dt, map)
     --enemy:spawn()
     enemy:move(dt, map)
 
-    --enemy:collision()
+    enemy:collision()
     self.animation:update(dt)
 end
 
@@ -179,16 +187,19 @@ function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2)
         y2 < y1 + h1
 end
 
+
 function enemy:collision()
+    if not shoot.bullets or #shoot.bullets == 0 then return end
+
     for i = #enemies, 1, -1 do
         local skeleton = enemies[i]
-        
-        for j = #bullets, 1, -1 do
-            local bullet = bullets[j]
-            
-            if checkCollision(bullet.x, bullet.y, 5, 5, skeleton.x, skeleton.y, self.width, self.height) then
+
+        for j = #shoot.bullets, 1, -1 do
+            local bullet = shoot.bullets[j]
+
+            if checkCollision(bullet.x, bullet.y, 5, 5, skeleton.x, skeleton.y, skeleton.width, skeleton.height) then
                 skeleton.health = skeleton.health - 1
-                table.remove(bullets, j)
+                table.remove(shoot.bullets, j)
 
                 if skeleton.health <= 0 then
                     table.remove(enemies, i)
@@ -201,6 +212,7 @@ function enemy:collision()
         end
     end
 end
+
 
 
 function enemy:returnPosition()

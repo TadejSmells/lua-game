@@ -14,7 +14,7 @@ function loadmap:load()
 
     self.spawnSettings = {
         [1] = { 
-            { enemyType = "goblin", spawnInterval = 3, spawnNumber = 5 },
+            { enemyType = "goblin", spawnInterval = 1, spawnNumber = 5 },
             { enemyType = "orc", spawnInterval = 5, spawnNumber = 3 }
         },
         [2] = { 
@@ -33,6 +33,7 @@ function loadmap:load()
             }
         end
     end
+    table.insert(loadmap, map1)
     map1:load()
 end
 
