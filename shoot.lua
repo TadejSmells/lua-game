@@ -5,7 +5,6 @@ shoot = {
     down = false
 }
 
--- Load the shooter
 function shoot:load()
     self.down = false
 end
@@ -23,14 +22,12 @@ end
 function shoot:fire(player, targetX, targetY)
     local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
 
-    -- Create a bullet that moves towards the mouse position
     local bullet = {
         x = playerX + (playerWidth / 2),
         y = playerY + (playerHeight / 2),
         speed = 300
     }
 
-    -- Calculate bullet direction
     local directionX = targetX - bullet.x
     local directionY = targetY - bullet.y
     local length = math.sqrt(directionX^2 + directionY^2)
@@ -38,7 +35,6 @@ function shoot:fire(player, targetX, targetY)
     bullet.dirX = directionX / length
     bullet.dirY = directionY / length
 
-    -- Store the bullet in the bullets table
     table.insert(self.bullets, bullet)
 end
 
@@ -54,12 +50,9 @@ function shoot:update(dt)
 
     for i = #self.bullets, 1, -1 do
         local bullet = self.bullets[i]
-
-        -- Move bullet
         bullet.x = bullet.x + bullet.dirX * bullet.speed * dt
         bullet.y = bullet.y + bullet.dirY * bullet.speed * dt
 
-        -- Remove bullet if it goes off-screen
         if bullet.x < 0 or bullet.x > screenWidth or bullet.y < 0 or bullet.y > screenHeight then
             table.remove(self.bullets, i)
         end
