@@ -51,6 +51,7 @@ function loadmap:update(dt)
                 end
             end
 
+            -- Check if wave is complete
             local waveComplete = true
             for _, count in pairs(self.remainingEnemies) do
                 if count > 0 then
@@ -66,11 +67,12 @@ function loadmap:update(dt)
         end
     else
         self.waveTimer = math.max(0, self.waveTimer - dt)
-        if self.waveTimer == 0 then
+
+        -- ✅ Prevent the wave counter from going above the max waves
+        local totalWaves = #self.spawnSettings[self.chosenMap]
+        if self.waveTimer == 0 and self.currentWave < totalWaves then
             self.currentWave = self.currentWave + 1
-            if self.spawnSettings[self.chosenMap][self.currentWave] then
-                self:startWave(self.currentWave)
-            end
+            self:startWave(self.currentWave)
         end
     end
 
@@ -78,6 +80,7 @@ function loadmap:update(dt)
         map:update(dt)
     end
 end
+
 
 function loadmap:startWave(waveNumber)
     local waveData = self.spawnSettings[self.chosenMap][waveNumber]
@@ -98,4 +101,27 @@ function loadmap:draw()
     for _, map in ipairs(loadmap) do
         map:draw()
     end
+
+    if self.chosenMap and self.spawnSettings[self.chosenMap] then
+        local totalWaves = #self.spawnSettings[self.chosenMap]
+        local waveText = "Wave: " .. self.currentWave .. " / " .. totalWaves
+        local timerText = self.waveActive and "" or ("Next wave in: " .. string.format("%.1f", self.waveTimer) .. "s")
+
+        local screenWidth = love.graphics.getWidth()
+        local textX, textY = screenWidth - 150, 10
+        local boxWidth, boxHeight = 140, 40
+
+        love.graphics.setColor(0, 0, 0, 0.5)
+        love.graphics.rectangle("fill", textX - 5, textY - 5, boxWidth, boxHeight, 5, 5)
+
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print(waveText, textX, textY)
+
+        if not self.waveActive then
+            love.graphics.print(timerText, textX, textY + 20)
+        end
+
+        love.graphics.setColor(1, 1, 1)
+    end
 end
+
