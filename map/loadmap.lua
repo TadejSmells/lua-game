@@ -1,5 +1,6 @@
 require("map.map")
 require("enemy")
+require("enemy")
 
 loadmap = {}
 
@@ -111,11 +112,13 @@ function loadmap:draw()
 
         local screenWidth = love.graphics.getWidth()
         local textX, textY = screenWidth - 150, 10
-        local boxWidth, boxHeight = 140, 40
+        local boxWidth, boxHeight = 140, 60 -- Increased height to fit HP
 
+        -- Background Box
         love.graphics.setColor(0, 0, 0, 0.5)
         love.graphics.rectangle("fill", textX - 5, textY - 5, boxWidth, boxHeight, 5, 5)
 
+        -- Text
         love.graphics.setColor(1, 1, 1)
         love.graphics.print(waveText, textX, textY)
 
@@ -123,7 +126,10 @@ function loadmap:draw()
             love.graphics.print(timerText, textX, textY + 20)
         end
 
+        -- Draw Tower HP
+        local hpText = "Tower HP: " .. tower.health
+        love.graphics.print(hpText, textX, textY + 40)
+
         love.graphics.setColor(1, 1, 1)
     end
 end
-

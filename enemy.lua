@@ -18,8 +18,8 @@ function enemy:spawn(spawnPoints)
     skeleton.speed = 100
     skeleton.health = 3
     local firstSpawnPoint = spawnPoints[1]
-    print(firstSpawnPoint.x)
-    print(firstSpawnPoint.y)
+    --print(firstSpawnPoint.x)
+    --print(firstSpawnPoint.y)
     skeleton.x = (firstSpawnPoint.x-1) * tileSize
     skeleton.y = (firstSpawnPoint.y-1) * tileSize
 

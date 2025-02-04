@@ -30,7 +30,7 @@ function love.update(dt)
     elseif gameState == "playing" then
         if not isPaused then 
             players:update(dt)
-            tower:update()
+            tower:update(dt)
             enemy:update(dt, map, enemyType)
             loadmap:update(dt)
             shoot:update(dt)
