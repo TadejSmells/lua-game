@@ -6,7 +6,6 @@ function tower:load()
     self.originalHeight = 545
     self.width = self.originalWidth / 10
     self.height = self.originalHeight / 10
-[]
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
 
