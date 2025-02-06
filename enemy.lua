@@ -15,7 +15,7 @@ end
 
 function enemy:spawn(spawnPoints)
     local skeleton = {}
-    skeleton.speed = 100
+    skeleton.speed = 200
     skeleton.health = 3
     local firstSpawnPoint = spawnPoints[1]
     --print(firstSpawnPoint.x)
@@ -113,8 +113,14 @@ function enemy:move(dt, map, enemyInfo)
             if math.abs(dx) < 1 and math.abs(dy) < 1 then
                 table.remove(enemyL.path, 1)
             end
+
+            if checkCollision(tower.x, tower.y, tower.width, tower.height, enemyL.x, enemyL.y, enemyL.width, enemyL.height) then
+                tower:takeDamage(5)
+                table.remove(enemies, i)
+            end
         end
     end
+
 end
 
 
@@ -126,7 +132,7 @@ function enemy:findPath(startX, startY, targetX, targetY, map)
 
     local function key(x, y) return x .. "," .. y end
     local function heuristic(x1, y1, x2, y2)
-        return math.abs(x1 - x2) + math.abs(y1 - y2) -- Manhattan distance
+        return math.abs(x1 - x2) + math.abs(y1 - y2)
     end
 
     gScore[key(startX, startY)] = 0
@@ -170,13 +176,13 @@ function enemy:findPath(startX, startY, targetX, targetY, map)
         end
     end
 
-    return nil -- No path found
+    return nil
 end
 
 
 function enemy:update(dt, map)
     --enemy:spawn()
-    enemy:move(dt, map)
+    enemy:move(dt, map, enemyInfo)
 
     enemy:collision()
     self.animation:update(dt)

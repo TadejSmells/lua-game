@@ -18,7 +18,7 @@ function loadmap:load()
         [1] = {
             { waveNumber = 1, spawnInterval = 1, enemies = { goblin = 5, orc = 3 } },
             { waveNumber = 2, spawnInterval = 1, enemies = { goblin = 10, orc = 5 } },
-            { waveNumber = 3, spawnInterval = 0.9, enemies = { goblin = 8, orc = 6 } },
+            { waveNumber = 3, spawnInterval = 0.5, enemies = { goblin = 8, orc = 6 } },
             { waveNumber = 4, spawnInterval = 0.9, enemies = { goblin = 9, orc = 4 } },
             { waveNumber = 5, spawnInterval = 0.8, enemies = { goblin = 10, orc = 6 } },
             { waveNumber = 6, spawnInterval = 1, enemies = { goblin = 20, orc = 15 } }

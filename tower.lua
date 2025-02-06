@@ -4,15 +4,18 @@ local sprite = require("sprite")
 function tower:load()
     self.originalWidth = 338
     self.originalHeight = 545
-    self.width = self.originalWidth / 10
-    self.height = self.originalHeight / 10
+
+    local scaleX = ratio - 0.7
+    local scaleY = ratio - 0.7
+
+    self.width = self.originalWidth * scaleX
+    self.height = self.originalHeight * scaleY
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
 
     self.animation = sprite:changeFrames(self.originalWidth, self.originalHeight, 6, "Tower-main.png")
 
-    local scaleX = ratio - 0.7
-    local scaleY = ratio - 0.7
+    
 
     self.x = (screenWidth - (self.originalWidth * scaleX)) / 2
     self.y = (screenHeight / 2) - (self.originalHeight * scaleY)
@@ -26,6 +29,9 @@ end
 
 function tower:takeDamage(amount)
     self.health = math.max(0, self.health - amount)
+    if self.health == 0 then
+        love.event.quit( "restart" )
+    end
 end
 
 function tower:returnPosition()
