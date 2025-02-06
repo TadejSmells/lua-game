@@ -4,7 +4,7 @@ local sprite = require("sprite")
 shoot = {
     bullets = {},
     down = false,
-    cooldownTime = 0.6,
+    cooldownTime = 0.5,
     cooldownTimer = 0
 }
 

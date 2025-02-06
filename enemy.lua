@@ -13,71 +13,31 @@ function enemy:load()
     self.animation = sprite:changeFrames(44, 30, 1, "enemy.png")
 end
 
-function enemy:spawn(spawnPoints)
-    local skeleton = {}
-    skeleton.speed = 200
-    skeleton.health = 3
+function enemy:spawn(spawnPoints, enemyType)
+    local enemy = {}
+    if enemyType == "pirate_slime" then
+        enemy.speed = 150
+        enemy.health = 2
+    elseif enemyType == "orc" then
+        enemy.speed = 100
+        enemy.health = 3
+    end
+    
     local firstSpawnPoint = spawnPoints[1]
     --print(firstSpawnPoint.x)
     --print(firstSpawnPoint.y)
-    skeleton.x = (firstSpawnPoint.x-1) * tileSize
-    skeleton.y = (firstSpawnPoint.y-1) * tileSize
+    enemy.x = (firstSpawnPoint.x-1) * tileSize
+    enemy.y = (firstSpawnPoint.y-1) * tileSize
 
     -- Assign enemy width and height
-    skeleton.width = self.width
-    skeleton.height = self.height
+    enemy.width = self.width
+    enemy.height = self.height
 
-    table.insert(enemies, skeleton)
+    table.insert(enemies, enemy)
     --print("Enemy spawned")
 end
 
-
---[[
-
-function enemy:spawn()
-    if love.keyboard.isDown("h") then 
-        local skeleton = {}
-        skeleton.speed = 100
-        skeleton.health = 3
-        local spawnSide = math.random(1,4)
-        if spawnSide == 1 then 
-            skeleton.x = screenWidth * (-0.1)
-            skeleton.y = math.random((screenHeight*0.1), (screenHeight-(screenHeight*0.1)))
-        elseif spawnSide == 2 then
-            skeleton.y = screenHeight * (-0.1)
-            skeleton.x = math.random((screenWidth*0.1), (screenWidth-(screenWidth*0.1)))
-        elseif spawnSide == 3 then
-            skeleton.x = screenWidth + (screenWidth * 0.1)
-            skeleton.y = math.random((screenHeight*0.1), (screenHeight-(screenHeight*0.1)))
-        elseif spawnSide == 4 then
-            skeleton.y = screenHeight + (screenHeight * 0.1)
-            skeleton.x = math.random((screenWidth*0.1), (screenWidth-(screenWidth*0.1)))
-        end
-        table.insert(enemies, skeleton)
-        print("spawned")
-    end
-end
-
-
-function enemy:move(dt)
-    local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
-    for i = #enemies, 1, -1 do
-        local enemyL = enemies[i]
-        if enemyL.x > playerX then
-            enemyL.x = enemyL.x - enemyL.speed * dt
-        elseif enemyL.x < playerX then
-            enemyL.x = enemyL.x + enemyL.speed * dt
-        end
-        if enemyL.y > playerY then
-            enemyL.y = enemyL.y - enemyL.speed * dt
-        elseif enemyL.y < playerY then
-            enemyL.y = enemyL.y + enemyL.speed * dt
-        end
-    end
-end
-]]--
-
-function enemy:move(dt, map, enemyInfo)
+function enemy:move(dt, map)
     local targetX = math.floor(#map.grid[1] / 2) 
     local targetY = math.floor(#map.grid / 2) 
     
@@ -120,7 +80,6 @@ function enemy:move(dt, map, enemyInfo)
             end
         end
     end
-
 end
 
 
@@ -182,7 +141,7 @@ end
 
 function enemy:update(dt, map)
     --enemy:spawn()
-    enemy:move(dt, map, enemyInfo)
+    enemy:move(dt, map)
 
     enemy:collision()
     self.animation:update(dt)
@@ -200,20 +159,20 @@ function enemy:collision()
     if not shoot.bullets or #shoot.bullets == 0 then return end
 
     for i = #enemies, 1, -1 do
-        local skeleton = enemies[i]
+        local enemy = enemies[i]
 
         for j = #shoot.bullets, 1, -1 do
             local bullet = shoot.bullets[j]
 
-            if checkCollision(bullet.x, bullet.y, 5, 5, skeleton.x, skeleton.y, skeleton.width, skeleton.height) then
-                skeleton.health = skeleton.health - 1
+            if checkCollision(bullet.x, bullet.y, 5, 5, enemy.x, enemy.y, enemy.width, enemy.height) then
+                enemy.health = enemy.health - 1
                 table.remove(shoot.bullets, j)
 
-                if skeleton.health <= 0 then
+                if enemy.health <= 0 then
                     table.remove(enemies, i)
                     --print("Enemy killed")
                 else
-                    --print("Enemy hit! Remaining health:", skeleton.health)
+                    --print("Enemy hit! Remaining health:", enemy.health)
                 end
                 break
             end
@@ -229,7 +188,7 @@ end
 
 
 function enemy:draw()
-    for i, skeleton in ipairs(enemies) do
-        self.animation:draw(skeleton.x, skeleton.y, self.width, self.height)
+    for i, enemy in ipairs(enemies) do
+        self.animation:draw(enemy.x, enemy.y, self.width, self.height)
     end
 end

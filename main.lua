@@ -31,7 +31,7 @@ function love.update(dt)
         if not isPaused then 
             players:update(dt)
             tower:update(dt)
-            enemy:update(dt, map, enemyType)
+            enemy:update(dt, map)
             loadmap:update(dt)
             shoot:update(dt)
         end
