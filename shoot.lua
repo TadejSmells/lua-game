@@ -3,7 +3,9 @@ local sprite = require("sprite")
 
 shoot = {
     bullets = {},
-    down = false
+    down = false,
+    cooldownTime = 0.6,
+    cooldownTimer = 0
 }
 
 function shoot:load()
@@ -14,14 +16,15 @@ function shoot:load()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    if button == 1 then
+    if button == 1 and shoot.cooldownTimer <= 0 then
         shoot.down = true
-        -- Use the first player (players[1]) for now. Change if needed.
         if players[1] then
             shoot:fire(players[1], x, y)
+            shoot.cooldownTimer = shoot.cooldownTime
         end
     end
 end
+
 
 function shoot:fire(player, targetX, targetY)
     local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
@@ -54,6 +57,10 @@ function shoot:update(dt)
     local screenWidth = love.graphics.getWidth()
     local screenHeight = love.graphics.getHeight()
 
+    if self.cooldownTimer > 0 then
+        self.cooldownTimer = self.cooldownTimer - dt
+    end
+
     for i = #self.bullets, 1, -1 do
         local bullet = self.bullets[i]
         bullet.x = bullet.x + bullet.dirX * bullet.speed * dt
@@ -64,6 +71,7 @@ function shoot:update(dt)
         end
     end
 end
+
 
 function shoot:draw()
     local scaleX = ratio - 0.6
