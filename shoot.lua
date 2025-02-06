@@ -1,4 +1,5 @@
 require("players")
+local sprite = require("sprite")
 
 shoot = {
     bullets = {},
@@ -7,6 +8,9 @@ shoot = {
 
 function shoot:load()
     self.down = false
+    self.originalWidth = 48
+    self.originalHeight = 28
+    self.animation = sprite:changeFrames(self.originalWidth, self.originalHeight, 2, "aseprite/bullet.png")
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
@@ -30,10 +34,12 @@ function shoot:fire(player, targetX, targetY)
 
     local directionX = targetX - bullet.x
     local directionY = targetY - bullet.y
+    
     local length = math.sqrt(directionX^2 + directionY^2)
 
     bullet.dirX = directionX / length
     bullet.dirY = directionY / length
+    bullet.angle = math.atan2(bullet.dirY, bullet.dirX)
 
     table.insert(self.bullets, bullet)
 end
@@ -60,7 +66,16 @@ function shoot:update(dt)
 end
 
 function shoot:draw()
+    local scaleX = ratio - 0.6
+    local scaleY = ratio - 0.6
     for _, bullet in ipairs(self.bullets) do
-        love.graphics.rectangle("fill", bullet.x, bullet.y, 5, 5)  -- Draw bullet
+        love.graphics.draw(
+            self.animation.spriteSheet,
+            self.animation.frames[self.animation.currentFrame],
+            bullet.x, bullet.y,
+            bullet.angle,
+            scaleX, scaleY,
+            self.originalWidth / 2, self.originalHeight / 2 
+        )
     end
 end
