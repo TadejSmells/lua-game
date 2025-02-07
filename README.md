@@ -5,3 +5,8 @@ Need to add:
   - add controller support for 2 players
   - add more bullet animations
   - add attack towers that attack enemies
+  - need to add split screen for two players when entering the shop
+  - add a starting screen where you buy items and select map
+  - display items of players (inventory)
+  - 
+  
