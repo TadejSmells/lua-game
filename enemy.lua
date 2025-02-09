@@ -98,12 +98,11 @@ function enemy:findPath(startX, startY, targetX, targetY, map)
     fScore[key(startX, startY)] = heuristic(startX, startY, targetX, targetY)
 
     while #openSet > 0 do
-        -- Find node with lowest fScore
+        
         table.sort(openSet, function(a, b) return a.estimate < b.estimate end)
         local current = table.remove(openSet, 1)
         local cx, cy = current.x, current.y
 
-        -- If target is reached
         if cx == targetX and cy == targetY then
             local path = {}
             while cameFrom[key(cx, cy)] do
@@ -113,7 +112,6 @@ function enemy:findPath(startX, startY, targetX, targetY, map)
             return path
         end
 
-        -- Check neighbors
         local directions = {
             {dx = -1, dy = 0}, -- Left
             {dx = 1, dy = 0},  -- Right
