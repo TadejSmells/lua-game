@@ -28,9 +28,9 @@ function enemy:spawn(spawnPoints, enemyType)
 
     local firstSpawnPoint = spawnPoints[1]
     enemy.x = (firstSpawnPoint.x - 1) * tileSize
-    enemy.y = (firstSpawnPoint.y - 1) * tileSize --+ tileSize - (self.height * (ratio - enemy.scale))
+    enemy.offset = tileSize - (self.height * (ratio - enemy.scale)) - 5
+    enemy.y = (firstSpawnPoint.y - 1) * tileSize + enemy.offset
     
-    -- Adjust width/height based on scale
     enemy.width = self.width * (ratio - enemy.scale)
     enemy.height = self.height * (ratio - enemy.scale)
 
@@ -47,7 +47,7 @@ function enemy:move(dt, map)
         local enemyL = enemies[i]
         local gridX = math.floor(enemyL.x / tileSize) + 1
 
-        local gridY = math.floor(enemyL.y / tileSize) + 1
+        local gridY = math.floor(((enemyL.y - enemyL.offset) / tileSize) + 1)
 
         if not enemyL.path or #enemyL.path == 0 then
             enemyL.path = self:findPath(gridX, gridY, targetX, targetY, map)
@@ -59,7 +59,7 @@ function enemy:move(dt, map)
             local targetPixelY = (nextStep.y - 1) * tileSize
 
             local dx = targetPixelX - enemyL.x
-            local dy = targetPixelY - enemyL.y
+            local dy = targetPixelY - enemyL.y + enemyL.offset
             local distance = math.sqrt(dx * dx + dy * dy)
 
             if distance > 0 then
