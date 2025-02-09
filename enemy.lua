@@ -6,44 +6,47 @@ enemies = {}
 
 
 function enemy:load()
-    self.height = spriteHeight
-    self.width = spriteWidth
+    self.height = 56
+    self.width = 51
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
-    self.animation = sprite:changeFrames(44, 30, 1, "enemy.png")
+    self.animation = sprite:changeFrames(51, 56, 8, "enemy_pirate.png")
 end
 
 function enemy:spawn(spawnPoints, enemyType)
     local enemy = {}
+
     if enemyType == "pirate_slime" then
         enemy.speed = 150
         enemy.health = 2
+        enemy.scale = 0.2
     elseif enemyType == "orc" then
         enemy.speed = 100
         enemy.health = 3
+        enemy.scale = 0.1
     end
-    
-    local firstSpawnPoint = spawnPoints[1]
-    --print(firstSpawnPoint.x)
-    --print(firstSpawnPoint.y)
-    enemy.x = (firstSpawnPoint.x-1) * tileSize
-    enemy.y = (firstSpawnPoint.y-1) * tileSize
 
-    -- Assign enemy width and height
-    enemy.width = self.width
-    enemy.height = self.height
+    local firstSpawnPoint = spawnPoints[1]
+    enemy.x = (firstSpawnPoint.x - 1) * tileSize
+    enemy.y = (firstSpawnPoint.y - 1) * tileSize --+ tileSize - (self.height * (ratio - enemy.scale))
+    
+    -- Adjust width/height based on scale
+    enemy.width = self.width * (ratio - enemy.scale)
+    enemy.height = self.height * (ratio - enemy.scale)
 
     table.insert(enemies, enemy)
-    --print("Enemy spawned")
 end
+
 
 function enemy:move(dt, map)
     local targetX = math.floor(#map.grid[1] / 2) 
     local targetY = math.floor(#map.grid / 2) 
+
     
     for i = #enemies, 1, -1 do
         local enemyL = enemies[i]
         local gridX = math.floor(enemyL.x / tileSize) + 1
+
         local gridY = math.floor(enemyL.y / tileSize) + 1
 
         if not enemyL.path or #enemyL.path == 0 then
@@ -161,8 +164,9 @@ function enemy:collision()
 
         for j = #shoot.bullets, 1, -1 do
             local bullet = shoot.bullets[j]
-
-            if checkCollision(bullet.x, bullet.y, 5, 5, enemy.x, enemy.y, enemy.width, enemy.height) then
+            
+            
+            if checkCollision(bullet.x, bullet.y, 5, 5, enemy.x , enemy.y, enemy.width, enemy.height) then
                 enemy.health = enemy.health - 1
                 table.remove(shoot.bullets, j)
 
@@ -187,6 +191,15 @@ end
 
 function enemy:draw()
     for i, enemy in ipairs(enemies) do
-        self.animation:draw(enemy.x, enemy.y, self.width, self.height)
+        local scaleX = ratio - enemy.scale
+        local scaleY = ratio - enemy.scale
+
+        love.graphics.draw(
+            self.animation.spriteSheet,
+            self.animation.frames[self.animation.currentFrame],
+            enemy.x, enemy.y,
+            0,
+            scaleX, scaleY
+        )
     end
 end

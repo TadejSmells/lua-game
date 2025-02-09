@@ -36,7 +36,7 @@ local baseSpriteWidth = 42
 chosenMap = 1
 isPaused = false
 
-ratio = math.min(ScreenWidth / renderScreenWidth, ScreenHeight / renderScreenHeight)
+ratio = math.max(math.min(ScreenWidth / renderScreenWidth, ScreenHeight / renderScreenHeight), 0.5)
 
 print(ratio)
 
