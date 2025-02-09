@@ -27,13 +27,14 @@ function enemy:spawn(spawnPoints, enemyType)
     end
 
     local firstSpawnPoint = spawnPoints[1]
-    enemy.x = (firstSpawnPoint.x - 1) * tileSize
-    enemy.offset = tileSize - (self.height * (ratio - enemy.scale)) - 5
-    enemy.y = (firstSpawnPoint.y - 1) * tileSize + enemy.offset
+    
     
     enemy.width = self.width * (ratio - enemy.scale)
     enemy.height = self.height * (ratio - enemy.scale)
 
+    enemy.x = (firstSpawnPoint.x - 1) * tileSize
+    enemy.offset = -tileSize/2 + tileSize - enemy.height + 10
+    enemy.y = (firstSpawnPoint.y - 1) * tileSize + enemy.offset
     table.insert(enemies, enemy)
 end
 
