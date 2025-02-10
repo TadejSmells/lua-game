@@ -5,3 +5,6 @@ Need to add:
   - add controller support for 2 players
   - add more bullet animations
   - add attack towers that attack enemies
+  - inventory za playerja
+  - različne stolpe
+  - 
