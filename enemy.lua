@@ -10,7 +10,6 @@ function enemy:load()
     self.width = 51
     screenWidth = love.graphics.getWidth()
     screenHeight = love.graphics.getHeight()
-    self.animation = sprite:changeFrames(51, 56, 8, "enemy_pirate.png")
 end
 
 function enemy:spawn(spawnPoints, enemyType)
@@ -20,10 +19,12 @@ function enemy:spawn(spawnPoints, enemyType)
         enemy.speed = 150
         enemy.health = 2
         enemy.scale = 0.2
+        enemy.animation = sprite:changeFrames(51, 56, 8, "enemy_pirate.png")
     elseif enemyType == "orc" then
         enemy.speed = 100
         enemy.health = 3
         enemy.scale = 0.1
+        enemy.animation = sprite:changeFrames(51, 56, 8, "pirate-green.png")
     end
 
     local firstSpawnPoint = spawnPoints[1]
@@ -146,7 +147,9 @@ function enemy:update(dt, map)
     enemy:move(dt, map)
 
     enemy:collision()
-    self.animation:update(dt)
+    for i, enemy in ipairs(enemies) do
+        enemy.animation:update(dt)
+    end
 end
 
 function checkCollision(x1, y1, w1, h1, x2, y2, w2, h2)
@@ -196,8 +199,8 @@ function enemy:draw()
         local scaleY = ratio - enemy.scale
 
         love.graphics.draw(
-            self.animation.spriteSheet,
-            self.animation.frames[self.animation.currentFrame],
+            enemy.animation.spriteSheet,
+            enemy.animation.frames[enemy.animation.currentFrame],
             enemy.x, enemy.y,
             0,
             scaleX, scaleY
