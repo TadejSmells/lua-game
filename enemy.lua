@@ -27,6 +27,8 @@ function enemy:spawn(spawnPoints, enemyType)
         enemy.animation = sprite:changeFrames(51, 56, 8, "pirate-green.png")
     end
 
+    enemy.maxHealth = enemy.health
+
     local firstSpawnPoint = spawnPoints[1]
     
     
@@ -205,5 +207,21 @@ function enemy:draw()
             0,
             scaleX, scaleY
         )
+        
+
+        local barWidth = enemy.width
+        local barHeight = 5
+        local barX = enemy.x
+        local barY = enemy.y - 10 
+        if(enemy.maxHealth > enemy.health) then
+            love.graphics.setColor(0.2, 0.2, 0.2)
+            love.graphics.rectangle("fill", barX, barY, barWidth, barHeight)
+    
+            love.graphics.setColor(1, 0, 0) 
+            love.graphics.rectangle("fill", barX, barY, barWidth * (enemy.health / enemy.maxHealth), barHeight)
+
+            love.graphics.setColor(1, 1, 1)
+        end
+
     end
 end
