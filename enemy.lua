@@ -164,7 +164,6 @@ end
 
 function enemy:collision()
     if not shoot.bullets or #shoot.bullets == 0 then return end
-
     for i = #enemies, 1, -1 do
         local enemy = enemies[i]
 
