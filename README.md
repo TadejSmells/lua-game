@@ -4,7 +4,7 @@ Need to add:
   - add settings in game and in menu
   - add controller support for 2 players
   - add more bullet animations
-  - add attack towers that attack enemies
+  - fix attack towers
   - inventory za playerja
   - različne stolpe
   - need to add split screen for two players when entering the shop
