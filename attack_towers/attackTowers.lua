@@ -22,11 +22,9 @@ end
 function attackTowers:update(dt)
     towerBullet:update(dt)
     self.animation:update(dt)
-    
 end
 
 function attackTowers:draw()
-    --towerBullet:draw()
     local scaleX = ratio - 0.9
     local scaleY = ratio - 0.9
 

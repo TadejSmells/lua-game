@@ -69,7 +69,6 @@ end
 function love.keypressed(key, scancode, isrepeat)
     if gameState == "menu" then
         if key == activeKeybinds.up then
-            print("menu up")
             menu.selected = menu.selected - 1
             if menu.selected < 1 then menu.selected = #menu.options end
         elseif key == activeKeybinds.down then
