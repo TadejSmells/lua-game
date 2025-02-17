@@ -7,7 +7,6 @@ function towerBullet:load()
     self.radius = 200 -- Attack range
     self.fireRate = 1 -- Seconds per shot
     self.timeSinceLastShot = 0
-    self.bullets = {}
     self.width = 48
     self.height = 28
     self.animation = sprite:changeFrames(self.width, self.height, 2, "aseprite/bullet.png")
@@ -26,8 +25,8 @@ function towerBullet:update(dt)
     end
 
     -- Update bullets
-    for i = #self.bullets, 1, -1 do
-        local bullet = self.bullets[i]
+    for i = #shoot.bullets, 1, -1 do
+        local bullet = shoot.bullets[i]
         
         -- Update direction dynamically
         local dx = bullet.target.x + (bullet.target.width / 2) - bullet.x
@@ -51,7 +50,7 @@ function towerBullet:draw()
     -- Draw bullets
     local scaleX = ratio - 0.6
     local scaleY = ratio - 0.6
-    for _, bullet in ipairs(self.bullets) do
+    for _, bullet in ipairs(shoot.bullets) do
         love.graphics.draw(
             self.animation.spriteSheet,
             self.animation.frames[self.animation.currentFrame],
@@ -84,8 +83,9 @@ function towerBullet:shootBullet(target)
         target = target,
         speed = 300,
         dx = 0,
-        dy = 0
+        dy = 0,
+        source = "tower"
     }
     
-    table.insert(self.bullets, bullet)
+    table.insert(shoot.bullets, bullet)
 end

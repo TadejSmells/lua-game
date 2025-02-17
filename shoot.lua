@@ -32,7 +32,8 @@ function shoot:fire(player, targetX, targetY)
     local bullet = {
         x = playerX + (playerWidth / 2),
         y = playerY + (playerHeight / 2),
-        speed = 300
+        speed = 300,
+        source = "player"
     }
 
     local directionX = targetX - bullet.x
@@ -63,11 +64,13 @@ function shoot:update(dt)
 
     for i = #self.bullets, 1, -1 do
         local bullet = self.bullets[i]
-        bullet.x = bullet.x + bullet.dirX * bullet.speed * dt
-        bullet.y = bullet.y + bullet.dirY * bullet.speed * dt
+        if bullet.source == "player" then
+            bullet.x = bullet.x + bullet.dirX * bullet.speed * dt
+            bullet.y = bullet.y + bullet.dirY * bullet.speed * dt
 
-        if bullet.x < 0 or bullet.x > screenWidth or bullet.y < 0 or bullet.y > screenHeight then
-            table.remove(self.bullets, i)
+            if bullet.x < 0 or bullet.x > screenWidth or bullet.y < 0 or bullet.y > screenHeight then
+                table.remove(self.bullets, i)
+            end
         end
     end
 end
