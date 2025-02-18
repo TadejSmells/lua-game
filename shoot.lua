@@ -35,29 +35,28 @@ function love.mousereleased(x, y, button, istouch, presses)
     end
 end
 
-
-
 function shoot:fire(player, directionX, directionY)
     if not player then return end
-    local playerX, playerY, playerWidth, playerHeight = player.x, player.y, player.width, player.height
+    local playerX = player.x + (player.width / 2)
+    local playerY = player.y + (player.height / 2)
+
+    local length = math.sqrt(directionX^2 + directionY^2)
+    if length == 0 then return end 
 
     local bullet = {
-        x = playerX + (playerWidth / 2),
-        y = playerY + (playerHeight / 2),
+        x = playerX,
+        y = playerY,
         speed = 300,
+        dirX = directionX / length,
+        dirY = directionY / length,
+        angle = math.atan2(directionY, directionX),
         source = "player"
     }
 
-    -- Normalize the direction vector
-    local length = math.sqrt(directionX^2 + directionY^2)
-    if length == 0 then return end -- Prevent division by zero
-
-    bullet.dirX = directionX / length
-    bullet.dirY = directionY / length
-    bullet.angle = math.atan2(bullet.dirY, bullet.dirX)
-
     table.insert(self.bullets, bullet)
 end
+
+
 
 
 function shoot:update(dt)

@@ -1,8 +1,6 @@
 local sprite = require("sprite")
 players = {}
 
-towers = {} -- Table to store placed towers
-
 function players:createPlayer(x, y, spriteSheet, controls, joystick)
     local player = {}
 
@@ -17,6 +15,8 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.joystick = joystick
         self.deadZone = 0.2
         self.buildPressed = false
+        self.cooldownTime = 0.5
+        self.shootCooldownTimer = 0
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
     end
 
@@ -24,14 +24,21 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self:move(dt)
         self:checkBoundaries()
         self:handleBuilding()
+
+        if self.shootCooldownTimer > 0 then
+            self.shootCooldownTimer = self.shootCooldownTimer - dt
+        end
     
         if self.joystick then
-            local r2Value = self.joystick:getAxis(6)
-            local rightX = self.joystick:getAxis(3) 
-            local rightY = self.joystick:getAxis(4)
-            --print(rightX .. " " .. rightY)
+            local r2Value = self.joystick:getAxis(6)  -- Right trigger
+            local rightX = self.joystick:getAxis(3)   -- Right stick X-axis
+            local rightY = self.joystick:getAxis(4)   -- Right stick Y-axis
+    
             if r2Value > 0.5 and (math.abs(rightX) > self.deadZone or math.abs(rightY) > self.deadZone) then
-                shoot:fire(self, rightX, rightY)
+                if self.shootCooldownTimer <= 0 then
+                    shoot:fire(self, rightX, rightY)
+                    self.shootCooldownTimer = self.cooldownTime  -- Reset cooldown
+                end
             end
         end
     
