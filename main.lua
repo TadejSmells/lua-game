@@ -94,6 +94,11 @@ function love.keypressed(key, scancode, isrepeat)
             isPaused = not isPaused
             activeKeybinds = keybinds.pauseMenu
         end
+        for _, player in ipairs(players) do
+            if key == player.controls.build then
+                player.buildPressed = true
+            end
+        end
     end
     if isPaused then
         if key == activeKeybinds.up then

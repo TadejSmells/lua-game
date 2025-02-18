@@ -16,14 +16,25 @@ function shoot:load()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    if button == 1 and shoot.cooldownTimer <= 0 then
-        shoot.down = true
-        if players[1] then
-            shoot:fire(players[1], x, y)
-            shoot.cooldownTimer = shoot.cooldownTime
+    if gameState == "playing" then
+        if button == 1 and shoot.cooldownTimer <= 0 then
+            shoot.down = true
+            if players[1] then
+                shoot:fire(players[1], x, y)
+                shoot.cooldownTimer = shoot.cooldownTime
+            end
         end
     end
 end
+
+function love.mousereleased(x, y, button, istouch, presses)
+    if gameState == "playing" then
+        if button == 1 then
+            shoot.down = false
+        end
+    end
+end
+
 
 
 function shoot:fire(player, targetX, targetY)
@@ -48,11 +59,6 @@ function shoot:fire(player, targetX, targetY)
     table.insert(self.bullets, bullet)
 end
 
-function love.mousereleased(x, y, button, istouch, presses)
-    if button == 1 then
-        shoot.down = false
-    end
-end
 
 function shoot:update(dt)
     local screenWidth = love.graphics.getWidth()

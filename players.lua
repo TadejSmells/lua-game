@@ -66,13 +66,6 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
             self.buildPressed = false -- Reset flag after spawning
         end
     end
-    
-    -- Capture the keypress event
-    function love.keypressed(key)
-        if key == player.controls.build then
-            player.buildPressed = true
-        end
-    end
 
     function player:draw()
         self.animation:draw(self.x, self.y, self.width, self.height)
