@@ -16,6 +16,7 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.controls = controls
         self.joystick = joystick
         self.deadZone = 0.2
+        self.buildPressed = false
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
     end
 
@@ -23,6 +24,17 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self:move(dt)
         self:checkBoundaries()
         self:handleBuilding()
+    
+        if self.joystick then
+            local r2Value = self.joystick:getAxis(6)
+            local rightX = self.joystick:getAxis(3) 
+            local rightY = self.joystick:getAxis(4)
+            --print(rightX .. " " .. rightY)
+            if r2Value > 0.5 and (math.abs(rightX) > self.deadZone or math.abs(rightY) > self.deadZone) then
+                shoot:fire(self, rightX, rightY)
+            end
+        end
+    
         self.animation:update(dt)
     end
 
@@ -60,21 +72,15 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
     end
     
     function player:handleBuilding()
-        -- Ensure the build action only triggers once per keypress
         if self.buildPressed then
             attackTowers:spawn(self.x, self.y)
-            self.buildPressed = false -- Reset flag after spawning
+            self.buildPressed = false
         end
     end
 
     function player:draw()
         self.animation:draw(self.x, self.y, self.width, self.height)
     end
-
-    function player:returncoordinates()
-        return self.x, self.y, self.width, self.height
-    end
-    
 
     return player
 end
@@ -102,5 +108,13 @@ end
 function players:draw()
     for _, player in ipairs(players) do
         player:draw()
+    end
+end
+
+function love.joystickpressed(joystick, button)
+    for _, player in ipairs(players) do
+        if player.joystick == joystick and (button == "a" or button == 1) then
+            player.buildPressed = true
+        end
     end
 end

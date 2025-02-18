@@ -37,9 +37,9 @@ end
 
 
 
-function shoot:fire(player, targetX, targetY)
-    if not player  then return end
-    local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
+function shoot:fire(player, directionX, directionY)
+    if not player then return end
+    local playerX, playerY, playerWidth, playerHeight = player.x, player.y, player.width, player.height
 
     local bullet = {
         x = playerX + (playerWidth / 2),
@@ -48,10 +48,9 @@ function shoot:fire(player, targetX, targetY)
         source = "player"
     }
 
-    local directionX = targetX - bullet.x
-    local directionY = targetY - bullet.y
-    
+    -- Normalize the direction vector
     local length = math.sqrt(directionX^2 + directionY^2)
+    if length == 0 then return end -- Prevent division by zero
 
     bullet.dirX = directionX / length
     bullet.dirY = directionY / length
