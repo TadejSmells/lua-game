@@ -71,6 +71,11 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.animation:draw(self.x, self.y, self.width, self.height)
     end
 
+    function player:returncoordinates()
+        return self.x, self.y, self.width, self.height
+    end
+    
+
     return player
 end
 

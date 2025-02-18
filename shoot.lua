@@ -38,6 +38,7 @@ end
 
 
 function shoot:fire(player, targetX, targetY)
+    if not player  then return end
     local playerX, playerY, playerWidth, playerHeight = player:returncoordinates()
 
     local bullet = {
