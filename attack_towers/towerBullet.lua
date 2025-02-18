@@ -1,39 +1,38 @@
 towerBullet = {}
 sprite = require("sprite")
 
-function towerBullet:load()
-    self.x = 200
-    self.y = 200
-    self.radius = 200 -- Attack range
-    self.fireRate = 1 -- Seconds per shot
-    self.timeSinceLastShot = 0
-    self.originalWidth = 48
-    self.originalHeight = 28
+towerBullet.towers = {} -- Store multiple towers with their bullet properties
 
+function towerBullet:spawn(tower)
+    -- Give each tower its own bullet properties
+    tower.fireRate = 1
+    tower.timeSinceLastShot = 0
+    tower.radius = 200
+    tower.originalWidth = 48
+    tower.originalHeight = 28
+    table.insert(self.towers, tower)
 end
 
 function towerBullet:update(dt)
+    for _, tower in ipairs(self.towers) do
+        tower.timeSinceLastShot = tower.timeSinceLastShot + dt
 
-    self.timeSinceLastShot = self.timeSinceLastShot + dt
-
-    -- Shoot if cooldown is ready
-    if self.timeSinceLastShot >= self.fireRate then
-        local target = self:findTarget()
-        if target then
-            self:shootBullet(target)
-            self.timeSinceLastShot = 0
+        if tower.timeSinceLastShot >= tower.fireRate then
+            local target = self:findTarget(tower)
+            if target then
+                self:shootBullet(tower, target)
+                tower.timeSinceLastShot = 0
+            end
         end
     end
 
-    -- Update bullets
     for i = #shoot.bullets, 1, -1 do
         local bullet = shoot.bullets[i]
         if bullet.source == "tower" then
-            -- Update direction dynamically
             local dx = bullet.target.x + (bullet.target.width / 2) - bullet.x
             local dy = bullet.target.y + (bullet.target.height / 2) - bullet.y
             local distance = math.sqrt(dx * dx + dy * dy)
-            bullet.angle = math.atan2(bullet.dy, bullet.dx)
+            bullet.angle = math.atan2(dy, dx)
             
             if distance > 0 then
                 bullet.dx = (dx / distance) * bullet.speed
@@ -43,17 +42,16 @@ function towerBullet:update(dt)
             bullet.x = bullet.x + bullet.dx * dt
             bullet.y = bullet.y + bullet.dy * dt
         end
-        -- Check for collision with target
     end
 end
 
-function towerBullet:findTarget()
+function towerBullet:findTarget(tower)
     local closestEnemy = nil
-    local closestDistance = self.radius
+    local closestDistance = tower.radius
     
     for _, enemy in ipairs(enemies) do
-        local distance = math.sqrt((enemy.x - (self.x + self.originalWidth / 2))^2 + (enemy.y - (self.y + self.originalHeight / 2))^2)
-        if distance <= self.radius and (not closestEnemy or distance < closestDistance) then
+        local distance = math.sqrt((enemy.x - (tower.x + tower.originalWidth / 2))^2 + (enemy.y - (tower.y + tower.originalHeight / 2))^2)
+        if distance <= tower.radius and (not closestEnemy or distance < closestDistance) then
             closestEnemy = enemy
             closestDistance = distance
         end
@@ -61,10 +59,10 @@ function towerBullet:findTarget()
     return closestEnemy
 end
 
-function towerBullet:shootBullet(target)
+function towerBullet:shootBullet(tower, target)
     local bullet = {
-        x = self.x + self.originalWidth / 2,
-        y = self.y,
+        x = tower.x + tower.originalWidth / 2,
+        y = tower.y,
         target = target,
         speed = 300,
         dx = 0,

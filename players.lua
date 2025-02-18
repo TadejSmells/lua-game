@@ -1,6 +1,8 @@
 local sprite = require("sprite")
 players = {}
 
+towers = {} -- Table to store placed towers
+
 function players:createPlayer(x, y, spriteSheet, controls, joystick)
     local player = {}
 
@@ -12,48 +14,40 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.width = spriteWidth
         self.speed = 500
         self.controls = controls
-        self.joystick = joystick  -- Store joystick object
-        self.deadZone = 0.2  -- Dead zone to ignore small stick drift
+        self.joystick = joystick
+        self.deadZone = 0.2
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
     end
 
     function player:update(dt)
         self:move(dt)
         self:checkBoundaries()
+        self:handleBuilding()
         self.animation:update(dt)
     end
 
     function player:move(dt)
         local moveX, moveY = 0, 0
-
-        -- Keyboard Controls
+        
         if love.keyboard.isDown(self.controls.up) then moveY = moveY - 1 end
         if love.keyboard.isDown(self.controls.down) then moveY = moveY + 1 end
         if love.keyboard.isDown(self.controls.left) then moveX = moveX - 1 end
         if love.keyboard.isDown(self.controls.right) then moveX = moveX + 1 end
 
-        -- Joystick Controls with Dead Zone Handling
         if self.joystick then
-            local axisX = self.joystick:getAxis(1) -- Left Stick X
-            local axisY = self.joystick:getAxis(2) -- Left Stick Y
-
-            -- Apply dead zone
-            if math.abs(axisX) > self.deadZone then
-                moveX = moveX + axisX
-            end
-            if math.abs(axisY) > self.deadZone then
-                moveY = moveY + axisY
-            end
+            local axisX = self.joystick:getAxis(1)
+            local axisY = self.joystick:getAxis(2)
+            
+            if math.abs(axisX) > self.deadZone then moveX = moveX + axisX end
+            if math.abs(axisY) > self.deadZone then moveY = moveY + axisY end
         end
-
-        -- Normalize diagonal movement
+        
         local length = math.sqrt(moveX * moveX + moveY * moveY)
         if length > 0 then
             moveX = (moveX / length) * self.speed * dt
             moveY = (moveY / length) * self.speed * dt
         end
-
-        -- Apply movement
+        
         self.x = self.x + moveX
         self.y = self.y + moveY
     end
@@ -64,9 +58,20 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         if self.x < 0 then self.x = 0 end
         if self.x + self.width > ScreenWidth then self.x = ScreenWidth - self.width end
     end
-
-    function player:returncoordinates()
-        return self.x, self.y, self.width, self.height
+    
+    function player:handleBuilding()
+        -- Ensure the build action only triggers once per keypress
+        if self.buildPressed then
+            attackTowers:spawn(self.x, self.y)
+            self.buildPressed = false -- Reset flag after spawning
+        end
+    end
+    
+    -- Capture the keypress event
+    function love.keypressed(key)
+        if key == player.controls.build then
+            player.buildPressed = true
+        end
     end
 
     function player:draw()
@@ -80,12 +85,12 @@ function players:load()
     local joysticks = love.joystick.getJoysticks()
 
     local player1 = players:createPlayer(ScreenWidth / 4, ScreenHeight / 2, "slime_idle.png", 
-        {up = "w", down = "s", left = "a", right = "d"}, joysticks[1]) -- Assign first controller
+        {up = "w", down = "s", left = "a", right = "d", build = "h"}, joysticks[1])
     player1:load()
     table.insert(players, player1)
 
     local player2 = players:createPlayer(ScreenWidth * 3 / 4, ScreenHeight / 2, "slime_idle.png", 
-        {up = "up", down = "down", left = "left", right = "right"}, joysticks[2]) -- Assign second controller
+        {up = "up", down = "down", left = "left", right = "right", build = "k"}, joysticks[2])
     player2:load()
     table.insert(players, player2)
 end
