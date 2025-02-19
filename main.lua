@@ -28,7 +28,7 @@ function love.update(dt)
     if gameState == "menu" then
         menu:update(dt)
     elseif gameState == "settings" then
-        settings:update(dt)
+        --settings:update(dt)
     elseif gameState == "playing" then
         if not isPaused then 
             players:update(dt)
@@ -65,7 +65,6 @@ function love.draw()
     end
 end
 
-
 function love.keypressed(key, scancode, isrepeat)
     if gameState == "menu" then
         if key == activeKeybinds.up then
@@ -76,7 +75,8 @@ function love.keypressed(key, scancode, isrepeat)
             if menu.selected > #menu.options then menu.selected = 1 end
         elseif key == activeKeybinds.select then
             if menu.selected == 1 then
-                gameState = "playing"              
+                gameState = "playing"
+                activeKeybinds = keybinds.pauseMenu  -- Set pause menu keybinds
             elseif menu.selected == 2 then
                 gameState = "settings"
                 activeKeybinds = keybinds.settings
@@ -85,17 +85,46 @@ function love.keypressed(key, scancode, isrepeat)
             end
         end
     elseif gameState == "settings" then
-        if key == activeKeybinds.back then
-            gameState = "menu"
-            activeKeybinds = keybinds.menu
-        end
+        if key == activeKeybinds.up then
+            settings.selected = settings.selected - 1
+            if settings.selected < 1 then settings.selected = #settings.options end
+        elseif key == activeKeybinds.down then
+            settings.selected = settings.selected + 1
+            if settings.selected > #settings.options then settings.selected = 1 end
+        elseif key == activeKeybinds.select then
+            if settings.selected == 1 then
+                gameState = "menu"
+                activeKeybinds = keybinds.menu
+            elseif settings.selected == 2 then  
+                if settings.player1Control == "keyboard" then
+                    settings.player1Control = "controller"
+                else
+                    if settings.player2Control == "keyboard" then
+                        settings.player2Control = "controller"
+                    end
+                    settings.player1Control = "keyboard"
+                end
+            elseif settings.selected == 3 then
+                if settings.player2Control == "keyboard" then
+                    settings.player2Control = "controller"
+                else
+                    if settings.player1Control == "keyboard" then
+                        settings.player1Control = "controller"
+                    end
+                    settings.player2Control = "keyboard"
+                end
+            end
+            settings.options[2] = "Player 1: " .. settings.player1Control:sub(1,1):upper() .. settings.player1Control:sub(2)
+            settings.options[3] = "Player 2: " .. settings.player2Control:sub(1,1):upper() .. settings.player2Control:sub(2)
+            players:reload()
+        end    
     elseif gameState == "playing" and not isPaused then
-        if key == keybinds.pauseMenu.pause then
+        if key == activeKeybinds.pause then
             isPaused = not isPaused
             activeKeybinds = keybinds.pauseMenu
         end
         for _, player in ipairs(players) do
-            if key == player.controls.build then
+            if player.controls and key == player.controls.build then
                 player.buildPressed = true
             end
         end
@@ -110,8 +139,9 @@ function love.keypressed(key, scancode, isrepeat)
         elseif key == activeKeybinds.select then
             if pauseMenu.selected == 1 then
                 isPaused = false
+                activeKeybinds = keybinds.pauseMenu  -- Restore pause menu keybinds
             elseif pauseMenu.selected == 2 then
-                
+                -- Handle other pause menu options
             elseif pauseMenu.selected == 3 then
                 gameState = "menu"
                 isPaused = false

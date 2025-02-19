@@ -9,7 +9,10 @@ keybinds = {
         select = "return"
     },
     settings = {
-        back = "return"
+        up = "up",
+        down = "down",
+        select = "return",
+        back = "escape"
     },
 
     pauseMenu = {

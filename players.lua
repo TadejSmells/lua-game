@@ -47,13 +47,14 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
 
     function player:move(dt)
         local moveX, moveY = 0, 0
-        
-        if love.keyboard.isDown(self.controls.up) then moveY = moveY - 1 end
-        if love.keyboard.isDown(self.controls.down) then moveY = moveY + 1 end
-        if love.keyboard.isDown(self.controls.left) then moveX = moveX - 1 end
-        if love.keyboard.isDown(self.controls.right) then moveX = moveX + 1 end
+    
+        if self.controls then
 
-        if self.joystick then
+            if love.keyboard.isDown(self.controls.up) then moveY = moveY - 1 end
+            if love.keyboard.isDown(self.controls.down) then moveY = moveY + 1 end
+            if love.keyboard.isDown(self.controls.left) then moveX = moveX - 1 end
+            if love.keyboard.isDown(self.controls.right) then moveX = moveX + 1 end
+        elseif self.joystick then
             local axisX = self.joystick:getAxis(1)
             local axisY = self.joystick:getAxis(2)
             
@@ -70,6 +71,7 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.x = self.x + moveX
         self.y = self.y + moveY
     end
+    
 
     function player:checkBoundaries()
         if self.y < 0 then self.y = 0 end
@@ -92,16 +94,53 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
     return player
 end
 
+function players:reload()
+    for i = #players, 1, -1 do
+        table.remove(players, i)
+    end
+
+    self:load()
+end
+
 function players:load()
     local joysticks = love.joystick.getJoysticks()
+    local p1Joystick, p2Joystick = nil, nil
+    local p1Controls, p2Controls
 
-    local player1 = players:createPlayer(ScreenWidth / 4, ScreenHeight / 2, "slime_idle.png", 
-        {up = "w", down = "s", left = "a", right = "d", build = "h"}, joysticks[1])
+    local keyboardControls = {
+        up = "w",
+        down = "s",
+        left = "a",
+        right = "d",
+        build = "h"
+    }
+
+    if settings.player1Control == "controller" and #joysticks > 0 then
+        p1Joystick = joysticks[1]
+        p1Controls = nil
+    else
+        p1Controls = keyboardControls
+        p1Joystick = nil
+    end
+
+    if settings.player2Control == "controller" and #joysticks > 0 then
+        if p1Joystick == nil then
+            p2Joystick = joysticks[1]
+        elseif #joysticks > 1 then
+            p2Joystick = joysticks[2]
+        end
+        p2Controls = nil 
+    else
+        p2Controls = keyboardControls
+        p2Joystick = nil
+    end
+
+    local player1 = players:createPlayer(ScreenWidth / 4, ScreenHeight / 2, "slime_idle.png",
+        p1Controls, p1Joystick)
     player1:load()
-    table.insert(players, player1)
 
-    local player2 = players:createPlayer(ScreenWidth * 3 / 4, ScreenHeight / 2, "slime_idle.png", 
-        {up = "up", down = "down", left = "left", right = "right", build = "k"}, joysticks[2])
+    local player2 = players:createPlayer(ScreenWidth * 3 / 4, ScreenHeight / 2, "slime_idle.png",
+        p2Controls, p2Joystick)
     player2:load()
     table.insert(players, player2)
 end
