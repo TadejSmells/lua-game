@@ -138,6 +138,7 @@ function players:load()
     local player1 = players:createPlayer(ScreenWidth / 4, ScreenHeight / 2, "slime_idle.png",
         p1Controls, p1Joystick)
     player1:load()
+    table.insert(players, player1)
 
     local player2 = players:createPlayer(ScreenWidth * 3 / 4, ScreenHeight / 2, "slime_idle.png",
         p2Controls, p2Joystick)

@@ -17,15 +17,21 @@ end
 
 function love.mousepressed(x, y, button, istouch, presses)
     if gameState == "playing" then
-        if button == 1 and shoot.cooldownTimer <= 0 then
-            shoot.down = true
-            if players[1] then
-                shoot:fire(players[1], x, y)
-                shoot.cooldownTimer = shoot.cooldownTime
+        for _, player in ipairs(players) do
+            if player.controls then
+                if player == players[1] and settings.player1Control == "keyboard" or 
+                    player == players[2] and settings.player2Control == "keyboard" then
+                    if button == 1 and shoot.cooldownTimer <= 0 then
+                        shoot.down = true
+                        shoot:fire(player, x, y)
+                        shoot.cooldownTimer = shoot.cooldownTime
+                    end
+                end
             end
         end
     end
 end
+
 
 function love.mousereleased(x, y, button, istouch, presses)
     if gameState == "playing" then
@@ -40,21 +46,42 @@ function shoot:fire(player, directionX, directionY)
     local playerX = player.x + (player.width / 2)
     local playerY = player.y + (player.height / 2)
 
-    local length = math.sqrt(directionX^2 + directionY^2)
-    if length == 0 then return end 
+    -- Handle different control schemes
+    if player.controls then
 
+        local length = math.sqrt(directionX^2 + directionY^2)
+        if length == 0 then return end
+        -- Normalize the direction
+        directionX = directionX / length
+        directionY = directionY / length
+    elseif player.joystick then
+        -- Joystick controls: Normalize the joystick direction
+        local length = math.sqrt(directionX^2 + directionY^2)
+        if length == 0 then return end
+
+        -- Normalize the joystick direction
+        directionX = directionX / length
+        directionY = directionY / length
+    end
+
+    -- Create the bullet with normalized direction
     local bullet = {
         x = playerX,
         y = playerY,
         speed = 300,
-        dirX = directionX / length,
-        dirY = directionY / length,
+        dirX = directionX,
+        dirY = directionY,
         angle = math.atan2(directionY, directionX),
+        print(math.atan2(directionY, directionX)),
         source = "player"
     }
 
+    -- Add bullet to the list
     table.insert(self.bullets, bullet)
 end
+
+
+
 
 
 
