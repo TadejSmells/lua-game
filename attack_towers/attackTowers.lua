@@ -53,7 +53,6 @@ function attackTowers:update(dt)
     if #towers > 0 then
         towerBullet:update(dt)
     end
-    
     for _, tower in ipairs(towers) do
         tower.animation:update(dt)
     end

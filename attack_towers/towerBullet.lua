@@ -24,21 +24,43 @@ function towerBullet:update(dt)
 
     for i = #shoot.bullets, 1, -1 do
         local bullet = shoot.bullets[i]
+    
         if bullet.source == "tower" then
-            local dx = bullet.target.x + (bullet.target.width / 2) - bullet.x
-            local dy = bullet.target.y + (bullet.target.height / 2) - bullet.y
-            local distance = math.sqrt(dx * dx + dy * dy)
-            bullet.angle = math.atan2(dy, dx)
-            
-            if distance > 0 then
-                bullet.dx = (dx / distance) * bullet.speed
-                bullet.dy = (dy / distance) * bullet.speed
+            local targetExists = false
+            for _, enemy in ipairs(enemies) do
+                if enemy == bullet.target then
+                    targetExists = true
+                    break
+                end
             end
-            
-            bullet.x = bullet.x + bullet.dx * dt
-            bullet.y = bullet.y + bullet.dy * dt
+
+            if not targetExists then
+                table.remove(shoot.bullets, i)
+            else
+                local dx = bullet.target.x + (bullet.target.width / 2) - bullet.x
+                local dy = bullet.target.y + (bullet.target.height / 2) - bullet.y
+                local distance = math.sqrt(dx * dx + dy * dy)
+                bullet.angle = math.atan2(dy, dx)
+                
+                if distance > 0 then
+                    bullet.dx = (dx / distance) * bullet.speed
+                    bullet.dy = (dy / distance) * bullet.speed
+                end
+                
+                bullet.x = bullet.x + bullet.dx * dt
+                bullet.y = bullet.y + bullet.dy * dt
+    
+                -- Check max travel distance
+                if bullet.startX and bullet.startY then
+                    local traveled = math.sqrt((bullet.x - bullet.startX)^2 + (bullet.y - bullet.startY)^2)
+                    if traveled > 200 then  
+                        table.remove(shoot.bullets, i)
+                    end
+                end
+            end
         end
     end
+    
 end
 
 function towerBullet:findTarget(tower)
