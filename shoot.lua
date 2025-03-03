@@ -61,6 +61,7 @@ function shoot:fire(player, directionX, directionY)
         x = playerX,
         y = playerY,
         speed = 300,
+        damage = 1,
         dirX = directionX,
         dirY = directionY,
         angle = math.atan2(directionY, directionX),

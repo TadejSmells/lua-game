@@ -92,7 +92,33 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
     
     function player:handleBuilding()
         if self.buildPressed then
-            attackTowers:spawn(self.x, self.y, towerTypes[self.currentTowerType])  
+            local canBuild = false
+            local buildX, buildY = nil, nil
+    
+            -- Get the current tower's type data
+            local towerData = attackTowers.towerTypes[towerTypes[self.currentTowerType]]
+            local towerWidth = towerData.width * (ratio - 0.9)  -- Scale to fit the screen
+            local towerHeight = towerData.height * (ratio - 0.9)
+    
+            for _, point in ipairs(map.towerSpawnPoints) do
+                local pointX, pointY = (point.x - 1) * tileSize, (point.y - 1) * tileSize
+                if math.abs(self.x - pointX) < tileSize / 2 and math.abs(self.y - pointY) < tileSize / 2 and not point.occupied then
+                    canBuild = true
+                    point.occupied = true  -- Mark the spawn point as occupied
+    
+                    -- Center the tower in the middle of the tile
+                    buildX = pointX + (tileSize / 2) - (towerWidth / 2)
+                    buildY = pointY + (tileSize / 2) - (towerHeight / 2)
+                    break
+                end
+            end
+    
+            if canBuild then
+                attackTowers:spawn(buildX, buildY, towerTypes[self.currentTowerType])
+            else
+                print("Cannot build here!")
+            end
+    
             self.buildPressed = false
         end
     end

@@ -172,7 +172,7 @@ function enemy:collision()
             
             
             if checkCollision(bullet.x, bullet.y, 5, 5, enemy.x , enemy.y, enemy.width, enemy.height) then
-                enemy.health = enemy.health - 1
+                enemy.health = enemy.health - bullet.damage
                 table.remove(shoot.bullets, j)
 
                 if enemy.health <= 0 then

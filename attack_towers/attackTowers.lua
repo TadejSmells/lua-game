@@ -6,13 +6,13 @@ towers = {}
 
 attackTowers.towerTypes = {
     ["basic"] = { 
-        width = 338, height = 545, sprite = "aseprite/tower1.png", fireRate = 1, radius = 200
+        width = 338, height = 545, sprite = "aseprite/tower1.png", fireRate = 1, radius = 200, damage = 1
     },
     ["rapid"] = { 
-        width = 300, height = 500, sprite = "aseprite/tower1.png", fireRate = 0.5, radius = 150
+        width = 300, height = 500, sprite = "aseprite/tower1.png", fireRate = 0.3, radius = 100, damage = 0.6
     },
     ["sniper"] = { 
-        width = 350, height = 600, sprite = "aseprite/tower1.png", fireRate = 2, radius = 300
+        width = 350, height = 600, sprite = "aseprite/tower1.png", fireRate = 3, radius = 400, damage = 2
     }
 }
 
@@ -35,6 +35,7 @@ function attackTowers:spawn(x, y, towerType)
         fireRate = typeData.fireRate, 
         timeSinceLastShot = 0,
         radius = typeData.radius,
+        damage = typeData.damage,
         animation = sprite:changeFrames(typeData.width, typeData.height, 1, typeData.sprite)
     }
 

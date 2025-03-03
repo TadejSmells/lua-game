@@ -5,6 +5,7 @@ function map:createMap(fileName)
 
         self.grid = {}
         self.spawnPoints = {}
+        self.towerSpawnPoints = {}
         map:loadFromTxt()
         local gridWidth = #self.grid[1]
         local gridHeight = #self.grid
@@ -40,6 +41,8 @@ function map:createMap(fileName)
                 if tileNumber == 99 then
                     -- Store spawn points as {x, y}
                     table.insert(self.spawnPoints, {x = x, y = y})
+                elseif tileNumber == 11 then
+                    table.insert(self.towerSpawnPoints, {x = x, y = y, occupied = false})
                 end
             end
         end

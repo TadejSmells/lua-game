@@ -82,6 +82,7 @@ function towerBullet:shootBullet(tower, target)
         x = tower.x + tower.originalWidth / 2,
         y = tower.y,
         target = target,
+        damage = tower.damage,
         speed = 300,
         dx = 0,
         dy = 0,
