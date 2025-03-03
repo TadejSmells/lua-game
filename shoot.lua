@@ -42,25 +42,21 @@ end
 
 function shoot:fire(player, directionX, directionY)
     if not player then return end
+
     local playerX = player.x + (player.width / 2)
     local playerY = player.y + (player.height / 2)
 
     if player.controls then
-        local length = math.sqrt(directionX^2 + directionY^2)
-        if length == 0 then return end
-
-        print(length)
-
-    elseif player.joystick then
-        local length = math.sqrt(directionX^2 + directionY^2)
-        if length == 0 then return end
-        
-        -- Normalize the joystick direction
-        directionX = directionX / length
-        directionY = directionY / length
+        directionX = directionX - playerX
+        directionY = directionY - playerY
     end
 
-    -- Create the bullet with normalized direction
+    local length = math.sqrt(directionX^2 + directionY^2)
+    if length == 0 then return end
+
+    directionX = directionX / length
+    directionY = directionY / length
+
     local bullet = {
         x = playerX,
         y = playerY,
@@ -71,15 +67,8 @@ function shoot:fire(player, directionX, directionY)
         source = "player"
     }
 
-    -- Add bullet to the list
     table.insert(self.bullets, bullet)
 end
-
-
-
-
-
-
 
 function shoot:update(dt)
     local screenWidth = love.graphics.getWidth()
