@@ -6,7 +6,8 @@ Need to add:
   - add more bullet animations
   - fix attack towers ✅
   - inventory za playerja
-  - različne stolpe
+  - različne stolpe ✅
+  - različne animacije za stolpe in nadgradnja stolpov
   - need to add split screen for two players when entering the shop
   - add a starting screen where you buy items and select map
   - display items of players (inventory)
