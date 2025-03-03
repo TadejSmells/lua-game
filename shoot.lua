@@ -32,7 +32,6 @@ function love.mousepressed(x, y, button, istouch, presses)
     end
 end
 
-
 function love.mousereleased(x, y, button, istouch, presses)
     if gameState == "playing" then
         if button == 1 then
@@ -46,19 +45,16 @@ function shoot:fire(player, directionX, directionY)
     local playerX = player.x + (player.width / 2)
     local playerY = player.y + (player.height / 2)
 
-    -- Handle different control schemes
     if player.controls then
-
         local length = math.sqrt(directionX^2 + directionY^2)
         if length == 0 then return end
-        -- Normalize the direction
-        directionX = directionX / length
-        directionY = directionY / length
+
+        print(length)
+
     elseif player.joystick then
-        -- Joystick controls: Normalize the joystick direction
         local length = math.sqrt(directionX^2 + directionY^2)
         if length == 0 then return end
-
+        
         -- Normalize the joystick direction
         directionX = directionX / length
         directionY = directionY / length
@@ -72,7 +68,6 @@ function shoot:fire(player, directionX, directionY)
         dirX = directionX,
         dirY = directionY,
         angle = math.atan2(directionY, directionX),
-        print(math.atan2(directionY, directionX)),
         source = "player"
     }
 
