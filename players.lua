@@ -1,6 +1,9 @@
 local sprite = require("sprite")
 players = {}
 
+-- Tower types
+local towerTypes = {"basic", "rapid", "sniper"}
+
 function players:createPlayer(x, y, spriteSheet, controls, joystick)
     local player = {}
 
@@ -18,6 +21,9 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.cooldownTime = 0.5
         self.shootCooldownTimer = 0
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
+        
+        self.currentTowerType = 1
+        self.changeTowerType = false
     end
 
     function player:update(dt)
@@ -41,7 +47,12 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
                 end
             end
         end
-    
+
+        if self.changeTowerType then
+            self:cycleTowerType()
+            self.changeTowerType = false
+        end
+
         self.animation:update(dt)
     end
 
@@ -49,7 +60,6 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         local moveX, moveY = 0, 0
     
         if self.controls then
-
             if love.keyboard.isDown(self.controls.up) then moveY = moveY - 1 end
             if love.keyboard.isDown(self.controls.down) then moveY = moveY + 1 end
             if love.keyboard.isDown(self.controls.left) then moveX = moveX - 1 end
@@ -82,13 +92,20 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
     
     function player:handleBuilding()
         if self.buildPressed then
-            attackTowers:spawn(self.x, self.y)
+            attackTowers:spawn(self.x, self.y, towerTypes[self.currentTowerType])  
             self.buildPressed = false
         end
     end
 
     function player:draw()
         self.animation:draw(self.x, self.y, self.width, self.height)
+    end
+
+    function player:cycleTowerType()
+        self.currentTowerType = self.currentTowerType + 1
+        if self.currentTowerType > #towerTypes then
+            self.currentTowerType = 1  -- Reset to first tower type
+        end
     end
 
     return player
@@ -102,6 +119,10 @@ function players:reload()
     self:load()
 end
 
+function players:setTowerTypeForPlayer(player, towerType)
+    attackTowers:setTowerType(towerType)
+end
+
 function players:load()
     local joysticks = love.joystick.getJoysticks()
     local p1Joystick, p2Joystick = nil, nil
@@ -112,7 +133,8 @@ function players:load()
         down = "s",
         left = "a",
         right = "d",
-        build = "h"
+        build = "h",
+        changeTowerType = "j"  -- Button for changing tower type on keyboard
     }
 
     if settings.player1Control == "controller" and #joysticks > 0 then
@@ -156,6 +178,15 @@ function players:draw()
     for _, player in ipairs(players) do
         player:draw()
     end
+
+    local player1 = players[1]
+    love.graphics.setColor(1, 1, 1)  -- White color for text
+    love.graphics.print("Player 1 Tower: " .. towerTypes[player1.currentTowerType], 10, ScreenHeight - 30)
+
+    local player2 = players[2]
+    love.graphics.setColor(1, 1, 1)  -- White color for text
+    love.graphics.print("Player 2 Tower: " .. towerTypes[player2.currentTowerType], ScreenWidth - 200, ScreenHeight - 30)
+
 end
 
 function love.joystickpressed(joystick, button)
@@ -163,5 +194,9 @@ function love.joystickpressed(joystick, button)
         if player.joystick == joystick and (button == "a" or button == 1) then
             player.buildPressed = true
         end
+        if player.joystick == joystick and (button == "y" or button == 4) then
+            player.changeTowerType = true
+        end
     end
 end
+

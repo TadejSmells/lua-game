@@ -4,10 +4,6 @@ sprite = require("sprite")
 towerBullet.towers = {} -- Store multiple towers with their bullet properties
 
 function towerBullet:spawn(tower)
-    -- Give each tower its own bullet properties
-    tower.fireRate = 1
-    tower.timeSinceLastShot = 0
-    tower.radius = 200
     tower.originalWidth = 48
     tower.originalHeight = 28
     table.insert(self.towers, tower)

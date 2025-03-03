@@ -124,8 +124,12 @@ function love.keypressed(key, scancode, isrepeat)
             activeKeybinds = keybinds.pauseMenu
         end
         for _, player in ipairs(players) do
-            if player.controls and key == player.controls.build then
-                player.buildPressed = true
+            if player.controls then
+                if  key == player.controls.build then
+                    player.buildPressed = true
+                elseif key == player.controls.changeTowerType then
+                    player.changeTowerType = true
+                end
             end
         end
     end
