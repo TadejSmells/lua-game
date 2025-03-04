@@ -1,8 +1,7 @@
 local sprite = require("sprite")
 players = {}
 
--- Tower types
-local towerTypes = {"basic", "rapid", "sniper"}
+local towerTypes = {"bow", "minigun", "cannon"}
 
 function players:createPlayer(x, y, spriteSheet, controls, joystick)
     local player = {}
@@ -201,21 +200,21 @@ function players:update(dt)
 end
 
 local inventorySlotSprite = love.graphics.newImage("one_slot.png")
-local towerTypesImages = {
+players.towerTypesImages = {
     [1] = love.graphics.newImage("bow.png"),
     [2] = love.graphics.newImage("minigun.png"),
     [3] = love.graphics.newImage("cannon.png"),
 }
 
 inventorySlotSprite:setFilter("nearest", "nearest")
-for _, towerSprite in pairs(towerTypesImages) do
+for _, towerSprite in pairs(players.towerTypesImages) do
     towerSprite:setFilter("nearest", "nearest")
 end
 
 local function drawInventory(player, x, y, slotSize)
     local scaleFactor = 2
     local slotWidth, slotHeight = inventorySlotSprite:getWidth(), inventorySlotSprite:getHeight()
-    local towerSprite = towerTypesImages[player.currentTowerType]
+    local towerSprite = players.towerTypesImages[player.currentTowerType]
     love.graphics.draw(inventorySlotSprite, x - (slotWidth * scaleFactor) / 2, y - (slotHeight * scaleFactor) / 2, 0, scaleFactor, scaleFactor)
     love.graphics.draw(towerSprite, x - (towerSprite:getWidth() * scaleFactor) / 2, y - (towerSprite:getHeight() * scaleFactor) / 2, 0, scaleFactor, scaleFactor)
 end

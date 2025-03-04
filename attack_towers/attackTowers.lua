@@ -1,31 +1,53 @@
 attackTowers = {}
 local sprite = require("sprite")
 require("attack_towers.towerBullet")
+require("players")
+
+function attackTowers:load()
+    self.originalWidth = 24
+    self.originalHeight = 34
+end
 
 towers = {}
 
+-- Load static base images
+towers.towerBaseImages = {
+    bow = love.graphics.newImage("attack_towers/img/attackTower.png"),
+    minigun = love.graphics.newImage("attack_towers/img/attackTower.png"),
+    cannon = love.graphics.newImage("attack_towers/img/attackTower.png"),
+}
+
+-- Apply nearest filter for pixel art
+for _, img in pairs(towers.towerBaseImages) do
+    img:setFilter("nearest", "nearest")
+end
+
 attackTowers.towerTypes = {
-    ["basic"] = { 
-        width = 338, height = 545, sprite = "aseprite/tower1.png", fireRate = 1, radius = 200, damage = 1
+    ["bow"] = { 
+        width = 12, height = 12, 
+        sprite = towers.towerBaseImages["bow"], 
+        animationSprite = "bow.png", -- Animation sprite sheet
+        fireRate = 1, radius = 200, damage = 1
     },
-    ["rapid"] = { 
-        width = 300, height = 500, sprite = "aseprite/tower1.png", fireRate = 0.3, radius = 100, damage = 0.6
+    ["minigun"] = { 
+        width = 16, height = 7, 
+        sprite = towers.towerBaseImages["minigun"], 
+        animationSprite = "minigun.png", 
+        fireRate = 0.3, radius = 100, damage = 0.6
     },
-    ["sniper"] = { 
-        width = 350, height = 600, sprite = "aseprite/tower1.png", fireRate = 3, radius = 400, damage = 2
+    ["cannon"] = { 
+        width = 16, height = 12, 
+        sprite = towers.towerBaseImages["cannon"], 
+        animationSprite = "cannon.png", 
+        fireRate = 3, radius = 400, damage = 2
     }
 }
 
-function attackTowers:load()
-    self.originalWidth = 338
-    self.originalHeight = 545
-end
-
 function attackTowers:spawn(x, y, towerType)
-    local typeData = self.towerTypes[towerType] or self.towerTypes["basic"]
+    local typeData = self.towerTypes[towerType] or self.towerTypes["bow"]
 
-    local scaleX = ratio - 0.9
-    local scaleY = ratio - 0.9
+    local scaleX = ratio + 0.4
+    local scaleY = ratio + 0.4
 
     local tower = {
         x = x,
@@ -36,18 +58,12 @@ function attackTowers:spawn(x, y, towerType)
         timeSinceLastShot = 0,
         radius = typeData.radius,
         damage = typeData.damage,
-        animation = sprite:changeFrames(typeData.width, typeData.height, 1, typeData.sprite)
+        baseImage = typeData.sprite,
+        animation = sprite:changeFrames(typeData.width, typeData.height, 1, typeData.animationSprite) -- Animation effect
     }
 
     towerBullet:spawn(tower)
     table.insert(towers, tower)
-end
-
-
-function attackTowers:setTowerType(towerType)
-    if self.towerTypes[towerType] then
-        self.selectedTowerType = towerType
-    end
 end
 
 function attackTowers:update(dt)
@@ -60,14 +76,19 @@ function attackTowers:update(dt)
 end
 
 function attackTowers:draw()
-    local scaleX = ratio - 0.9
-    local scaleY = ratio - 0.9
+    local scaleX = ratio + 0.4
+    local scaleY = ratio + 0.4
     
     for _, tower in ipairs(towers) do
+        local centerX = tower.x - (tower.width * scaleX) / 2
+        local centerY = tower.y - (tower.height * scaleY) / 2
+
+        love.graphics.draw(tower.baseImage, centerX, centerY, 0, scaleX, scaleY)
+
         love.graphics.draw(
             tower.animation.spriteSheet,
             tower.animation.frames[tower.animation.currentFrame],
-            tower.x, tower.y,
+            centerX, centerY,
             0,
             scaleX, scaleY
         )

@@ -4,6 +4,9 @@ function sprite:changeFrames(frameWidth, frameHeight, totalFrames, imagePath)
     local animation = {}
 
     animation.spriteSheet = love.graphics.newImage(imagePath)
+    animation.spriteSheet:setFilter("nearest", "nearest")
+
+    
     animation.frameWidth = frameWidth
     animation.frameHeight = frameHeight
     animation.totalFrames = totalFrames
