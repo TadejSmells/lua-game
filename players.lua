@@ -20,7 +20,6 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.cooldownTime = 0.5
         self.shootCooldownTimer = 0
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
-        
         self.currentTowerType = 1
         self.changeTowerType = false
     end
@@ -35,14 +34,14 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         end
     
         if self.joystick then
-            local r2Value = self.joystick:getAxis(6)  -- Right trigger
-            local rightX = self.joystick:getAxis(3)   -- Right stick X-axis
-            local rightY = self.joystick:getAxis(4)   -- Right stick Y-axis
+            local r2Value = self.joystick:getAxis(6)
+            local rightX = self.joystick:getAxis(3)
+            local rightY = self.joystick:getAxis(4)
     
             if r2Value > 0.5 and (math.abs(rightX) > self.deadZone or math.abs(rightY) > self.deadZone) then
                 if self.shootCooldownTimer <= 0 then
                     shoot:fire(self, rightX, rightY)
-                    self.shootCooldownTimer = self.cooldownTime  -- Reset cooldown
+                    self.shootCooldownTimer = self.cooldownTime
                 end
             end
         end
@@ -93,19 +92,17 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         if self.buildPressed then
             local canBuild = false
             local buildX, buildY = nil, nil
-    
-            -- Get the current tower's type data
+
             local towerData = attackTowers.towerTypes[towerTypes[self.currentTowerType]]
-            local towerWidth = towerData.width * (ratio - 0.9)  -- Scale to fit the screen
+            local towerWidth = towerData.width * (ratio - 0.9)
             local towerHeight = towerData.height * (ratio - 0.9)
     
             for _, point in ipairs(map.towerSpawnPoints) do
                 local pointX, pointY = (point.x - 1) * tileSize, (point.y - 1) * tileSize
                 if math.abs(self.x - pointX) < tileSize / 2 and math.abs(self.y - pointY) < tileSize / 2 and not point.occupied then
                     canBuild = true
-                    point.occupied = true  -- Mark the spawn point as occupied
-    
-                    -- Center the tower in the middle of the tile
+                    point.occupied = true
+
                     buildX = pointX + (tileSize / 2) - (towerWidth / 2)
                     buildY = pointY + (tileSize / 2) - (towerHeight / 2)
                     break
@@ -129,7 +126,7 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
     function player:cycleTowerType()
         self.currentTowerType = self.currentTowerType + 1
         if self.currentTowerType > #towerTypes then
-            self.currentTowerType = 1  -- Reset to first tower type
+            self.currentTowerType = 1
         end
     end
 
@@ -159,7 +156,7 @@ function players:load()
         left = "a",
         right = "d",
         build = "h",
-        changeTowerType = "j"  -- Button for changing tower type on keyboard
+        changeTowerType = "j"
     }
 
     if settings.player1Control == "controller" and #joysticks > 0 then
@@ -228,11 +225,6 @@ function players:draw()
     drawInventory(players[2], ScreenWidth - slotSize - 15 , ScreenHeight - slotSize - 15, slotSize)
 end
 
-
-
-
-
-
 function love.joystickpressed(joystick, button)
     for _, player in ipairs(players) do
         if player.joystick == joystick and (button == "a" or button == 1) then
@@ -243,4 +235,3 @@ function love.joystickpressed(joystick, button)
         end
     end
 end
-
