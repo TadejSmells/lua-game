@@ -200,20 +200,39 @@ function players:update(dt)
     end
 end
 
+local inventorySlotSprite = love.graphics.newImage("one_slot.png")
+local towerTypesImages = {
+    [1] = love.graphics.newImage("bow.png"),
+    [2] = love.graphics.newImage("minigun.png"),
+    [3] = love.graphics.newImage("cannon.png"),
+}
+
+inventorySlotSprite:setFilter("nearest", "nearest")
+for _, towerSprite in pairs(towerTypesImages) do
+    towerSprite:setFilter("nearest", "nearest")
+end
+
+local function drawInventory(player, x, y, slotSize)
+    local scaleFactor = 2
+    local slotWidth, slotHeight = inventorySlotSprite:getWidth(), inventorySlotSprite:getHeight()
+    local towerSprite = towerTypesImages[player.currentTowerType]
+    love.graphics.draw(inventorySlotSprite, x - (slotWidth * scaleFactor) / 2, y - (slotHeight * scaleFactor) / 2, 0, scaleFactor, scaleFactor)
+    love.graphics.draw(towerSprite, x - (towerSprite:getWidth() * scaleFactor) / 2, y - (towerSprite:getHeight() * scaleFactor) / 2, 0, scaleFactor, scaleFactor)
+end
+
 function players:draw()
     for _, player in ipairs(players) do
         player:draw()
     end
-
-    local player1 = players[1]
-    love.graphics.setColor(1, 1, 1)  -- White color for text
-    love.graphics.print("Player 1 Tower: " .. towerTypes[player1.currentTowerType], 10, ScreenHeight - 30)
-
-    local player2 = players[2]
-    love.graphics.setColor(1, 1, 1)  -- White color for text
-    love.graphics.print("Player 2 Tower: " .. towerTypes[player2.currentTowerType], ScreenWidth - 200, ScreenHeight - 30)
-
+    local slotSize = 14
+    drawInventory(players[1], 15 + (slotSize * 2) / 2, ScreenHeight - slotSize - 15, slotSize)
+    drawInventory(players[2], ScreenWidth - slotSize - 15 , ScreenHeight - slotSize - 15, slotSize)
 end
+
+
+
+
+
 
 function love.joystickpressed(joystick, button)
     for _, player in ipairs(players) do
