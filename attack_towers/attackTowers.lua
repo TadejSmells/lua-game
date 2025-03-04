@@ -10,14 +10,12 @@ end
 
 towers = {}
 
--- Load static base images
 towers.towerBaseImages = {
     bow = love.graphics.newImage("attack_towers/img/attackTower.png"),
     minigun = love.graphics.newImage("attack_towers/img/attackTower.png"),
     cannon = love.graphics.newImage("attack_towers/img/attackTower.png"),
 }
 
--- Apply nearest filter for pixel art
 for _, img in pairs(towers.towerBaseImages) do
     img:setFilter("nearest", "nearest")
 end
@@ -26,7 +24,7 @@ attackTowers.towerTypes = {
     ["bow"] = { 
         width = 12, height = 12, 
         sprite = towers.towerBaseImages["bow"], 
-        animationSprite = "bow.png", -- Animation sprite sheet
+        animationSprite = "bow.png",
         fireRate = 1, radius = 200, damage = 1
     },
     ["minigun"] = { 
