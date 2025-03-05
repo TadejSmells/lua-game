@@ -12,6 +12,7 @@ function attackTowersUpgrades:load()
     }
     self.selectedTower = nil
     self.selectedPlayer = nil
+    self.inRange = false
 
     self.images = {
         fireRate = love.graphics.newImage("attack_towers/fireRate.png"),
@@ -34,6 +35,14 @@ function attackTowersUpgrades:getClosestTower(playerX, playerY)
     return closestTower
 end
 
+function attackTowersUpgrades:upgrade(upgradeType)
+    if self.selectedTower.upgradeCount < 4 and not self.selectedTower.upgrades[upgradeType] then
+        self.upgradeOptions[upgradeType](self.selectedTower)
+        self.selectedTower.upgrades[upgradeType] = true
+        self.selectedTower.upgradeCount = self.selectedTower.upgradeCount + 1
+    end
+end
+
 function attackTowersUpgrades:showUpgradeMenu(tower, player)
     self.selectedTower = tower
     self.selectedPlayer = player
@@ -47,8 +56,10 @@ end
 
 function attackTowersUpgrades:draw()
     if self.selectedTower and self:isPlayerInRange(self.selectedPlayer.x, self.selectedPlayer.y) then
+        self.inRange = true
         self:drawTower(self.selectedTower)
     else
+        self.inRange = false
         self.selectedTower = nil
     end
 end

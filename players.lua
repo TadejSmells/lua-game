@@ -254,5 +254,16 @@ function love.joystickpressed(joystick, button)
         if player.joystick == joystick and (button == "y" or button == 4) then
             player.changeTowerType = true
         end
+        if attackTowersUpgrades.inRange then
+            if player.joystick == joystick and (button == "up" or button == 12) then
+                attackTowersUpgrades:upgrade("speed")
+            elseif player.joystick == joystick and (button == "down" or button == 13) then
+                attackTowersUpgrades:upgrade("damage")
+            elseif player.joystick == joystick and (button == "left" or button == 14) then
+                attackTowersUpgrades:upgrade("range")
+            elseif player.joystick == joystick and (button == "right" or button == 15) then
+                attackTowersUpgrades:upgrade("fireRate")
+            end
+        end
     end
 end

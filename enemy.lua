@@ -31,21 +31,18 @@ function enemy:spawn(spawnPoints, enemyType)
         enemy.scale = 0.3
         enemy.animation = sprite:changeFrames(51, 56, 8, "pirate-red.png")
     end
-
+    
     enemy.maxHealth = enemy.health
-
     local firstSpawnPoint = spawnPoints[1]
-    
-    
+
     enemy.width = self.width * (ratio - enemy.scale)
     enemy.height = self.height * (ratio - enemy.scale)
-
+    
     enemy.x = (firstSpawnPoint.x - 1) * tileSize
     enemy.offset = -tileSize/2 + tileSize - enemy.height + 10
     enemy.y = (firstSpawnPoint.y - 1) * tileSize + enemy.offset
     table.insert(enemies, enemy)
 end
-
 
 function enemy:move(dt, map)
     local targetX = math.floor(#map.grid[1] / 2) 

@@ -35,7 +35,7 @@ attackTowers.towerTypes = {
     ["cannon"] = { 
         width = 16, height = 12, 
         sprite = towers.towerBaseImages["cannon"], 
-        animationSprite = "cannon.png", 
+        animationSprite = "cannon.png",
         fireRate = 3, radius = 400, damage = 2, speed = 250
     }
 }
@@ -76,13 +76,7 @@ function attackTowers:selectNextTower(player)
     end
 end
 
-function attackTowers:upgrade(tower, upgradeType)
-    if tower.upgradeCount < 4 and not tower.upgrades[upgradeType] then
-        self.upgradeOptions[upgradeType](tower)
-        tower.upgrades[upgradeType] = true
-        tower.upgradeCount = tower.upgradeCount + 1
-    end
-end
+
 
 function attackTowers:update(dt)
     if #towers > 0 then
@@ -90,18 +84,6 @@ function attackTowers:update(dt)
     end
     for _, tower in ipairs(towers) do
         tower.animation:update(dt)
-    end
-end
-
-function attackTowers:handleInput(player)
-    --[[if love.keyboard.isDown("u") then
-        self:upgradeClosestTower(player)
-    end ]]--
-    if love.keyboard.isDown("t") then
-        self:selectNextTower(player)
-    end
-    if love.keyboard.isDown("y") then
-        self:cycleUpgrade(player)
     end
 end
 

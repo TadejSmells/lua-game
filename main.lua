@@ -1,4 +1,3 @@
-
 require("players")
 require("tower")
 require("enemy")
@@ -73,7 +72,7 @@ function love.keypressed(key, scancode, isrepeat)
         elseif key == activeKeybinds.select then
             if menu.selected == 1 then
                 gameState = "playing"
-                activeKeybinds = keybinds.pauseMenu  -- Set pause menu keybinds
+                activeKeybinds = keybinds.pauseMenu
             elseif menu.selected == 2 then
                 gameState = "settings"
                 activeKeybinds = keybinds.settings
@@ -126,9 +125,19 @@ function love.keypressed(key, scancode, isrepeat)
                     player.buildPressed = true
                 elseif key == player.controls.changeTowerType then
                     player.changeTowerType = true
-                end
-                if key == player.controls.upgrade then
+                elseif key == player.controls.upgrade then
                     player.upgradePressed = true
+                end
+                if attackTowersUpgrades.inRange then
+                    if key == player.controls.upgradeUp then
+                        
+                    elseif key == player.controls.upgradeRight then
+                        
+                    elseif key == player.controls.upgradeDown then
+                        
+                    elseif key == player.controls.upgradeLeft then
+                        
+                    end
                 end
             end
         end
@@ -143,7 +152,7 @@ function love.keypressed(key, scancode, isrepeat)
         elseif key == activeKeybinds.select then
             if pauseMenu.selected == 1 then
                 isPaused = false
-                activeKeybinds = keybinds.pauseMenu  -- Restore pause menu keybinds
+                activeKeybinds = keybinds.pauseMenu
             elseif pauseMenu.selected == 2 then
                 -- Handle other pause menu options
             elseif pauseMenu.selected == 3 then
