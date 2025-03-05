@@ -10,6 +10,7 @@ require("pauseMenu")
 require("map.map")
 require("shoot")
 require("attack_towers.attackTowers")
+require("attack_towers.attackTowersUpgrades")
 
 
 function love.load()
@@ -22,6 +23,7 @@ function love.load()
     pauseMenu:load()
     shoot:load()
     attackTowers:load()
+    attackTowersUpgrades:load()
 end
 
 function love.update(dt)
@@ -47,19 +49,14 @@ function love.draw()
     elseif gameState == "settings" then
         settings:draw()
     elseif gameState == "playing" then
-        if not isPaused then 
-            loadmap:draw()
-            attackTowers:draw()
-            tower:draw()
-            enemy:draw()
-            shoot:draw()
-            players:draw()
-        else
-            loadmap:draw()
-            attackTowers:draw()
-            tower:draw()
-            enemy:draw()
-            players:draw()
+        loadmap:draw()
+        attackTowersUpgrades:draw()
+        attackTowers:draw()
+        tower:draw()
+        enemy:draw()
+        shoot:draw()
+        players:draw()
+        if isPaused then 
             pauseMenu:draw()
         end
     end

@@ -1,6 +1,7 @@
 local sprite = require("sprite")
 players = {}
 
+
 local towerTypes = {"bow", "minigun", "cannon"}
 
 function players:createPlayer(x, y, spriteSheet, controls, joystick)
@@ -23,7 +24,6 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
         self.currentTowerType = 1
         self.changeTowerType = false
-        self.currentUpgradeIndex = 1
     end
 
     function player:update(dt)
@@ -97,10 +97,10 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
 
     function player:upgradeClosestTower()
         if self.upgradePressed then
-            local tower = attackTowers.getClosestTower(self.x, self.y)
+            local tower = attackTowersUpgrades:getClosestTower(self.x, self.y)
             if tower then
-                local upgradeType = self.availableUpgrades[player.currentUpgradeIndex]
-                self:upgrade(tower, upgradeType)
+                attackTowersUpgrades:showUpgradeMenu(tower, self)
+                
             end
         end
     end
