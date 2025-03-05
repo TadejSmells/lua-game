@@ -24,8 +24,8 @@ function loadmap:load()
             { waveNumber = 6, spawnInterval = 1, enemies = { pirate_slime = 20, orc = 15, nea = 1 } }
         },
         [2] = {
-            { waveNumber = 1, spawnInterval = 3, enemies = { skeleton = 6, zombie = 8, nea = 1 } },
-            { waveNumber = 2, spawnInterval = 3, enemies = { skeleton = 12, zombie = 10, nea = 1 } }
+            { waveNumber = 1, spawnInterval = 3, enemies = { pirate_slime = 6, orc = 8, nea = 1 } },
+            { waveNumber = 2, spawnInterval = 3, enemies = { pirate_slime = 12, orc = 10, nea = 1 } }
         }
     }
 
