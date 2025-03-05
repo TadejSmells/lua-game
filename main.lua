@@ -23,6 +23,8 @@ function love.load()
     shoot:load()
     attackTowers:load()
     attackTowersUpgrades:load()
+    treeImage = love.graphics.newImage("map/map-layouts/tree.png")
+    shadowImage = love.graphics.newImage("map/map-layouts/treeShadow.png")
 end
 
 function love.update(dt)
@@ -52,9 +54,13 @@ function love.draw()
         attackTowers:draw()
         tower:draw()
         enemy:draw()
+        love.graphics.draw(shadowImage, 100, 100)
+        love.graphics.draw(treeImage, 116, 63)
         shoot:draw()
         players:draw()
         attackTowersUpgrades:draw()
+        
+
         if isPaused then 
             pauseMenu:draw()
         end
