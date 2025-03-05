@@ -79,7 +79,6 @@ end
 function attackTowers:getClosestTower(playerX, playerY)
     local closestTower = nil
     local minDist = attackTowers.upgradeRange
-    print(playerY)
     for _, tower in ipairs(towers) do
         local dist = math.sqrt((tower.x - playerX)^2 + (tower.y - playerY)^2)
         if dist < minDist then

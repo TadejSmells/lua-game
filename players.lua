@@ -97,7 +97,9 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
 
     function player:upgradeClosestTower()
         if self.upgradePressed then
-            local tower = attackTowers.getClosestTower(self.x, self.y)
+            local newY = 15
+            local tower = attackTowers.getClosestTower(self.x, newY)
+            -- local tower = attackTowers.getClosestTower(self.x, self.y)
             if tower then
                 local upgradeType = self.availableUpgrades[player.currentUpgradeIndex]
                 self:upgrade(tower, upgradeType)
