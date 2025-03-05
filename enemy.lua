@@ -25,6 +25,11 @@ function enemy:spawn(spawnPoints, enemyType)
         enemy.health = 3
         enemy.scale = 0.1
         enemy.animation = sprite:changeFrames(51, 56, 8, "pirate-green.png")
+    elseif enemyType == "nea" then
+        enemy.speed = 180
+        enemy.health = 5
+        enemy.scale = 0.3
+        enemy.animation = sprite:changeFrames(51, 56, 8, "pirate-red.png")
     end
 
     enemy.maxHealth = enemy.health
