@@ -30,7 +30,7 @@ function love.update(dt)
     elseif gameState == "settings" then
         --settings:update(dt)
     elseif gameState == "playing" then
-        if not isPaused then 
+        if not isPaused then
             players:update(dt)
             tower:update(dt)
             enemy:update(dt, map)
@@ -129,6 +129,9 @@ function love.keypressed(key, scancode, isrepeat)
                     player.buildPressed = true
                 elseif key == player.controls.changeTowerType then
                     player.changeTowerType = true
+                end
+                if key == player.controls.upgrade then
+                    player.upgradePressed = true
                 end
             end
         end

@@ -17,11 +17,13 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.joystick = joystick
         self.deadZone = 0.2
         self.buildPressed = false
+        self.upgradePressed = false
         self.cooldownTime = 0.5
         self.shootCooldownTimer = 0
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
         self.currentTowerType = 1
         self.changeTowerType = false
+        self.currentUpgradeIndex = 1
     end
 
     function player:update(dt)
@@ -49,6 +51,11 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         if self.changeTowerType then
             self:cycleTowerType()
             self.changeTowerType = false
+        end
+
+        if self.upgradePressed then
+            self:upgradeClosestTower()
+            self.upgradePressed = false
         end
 
         self.animation:update(dt)
@@ -86,6 +93,16 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         if self.y + self.height > ScreenHeight then self.y = ScreenHeight - self.height end
         if self.x < 0 then self.x = 0 end
         if self.x + self.width > ScreenWidth then self.x = ScreenWidth - self.width end
+    end
+
+    function player:upgradeClosestTower()
+        if self.upgradePressed then
+            local tower = attackTowers.getClosestTower(self.x, self.y)
+            if tower then
+                local upgradeType = self.availableUpgrades[player.currentUpgradeIndex]
+                self:upgrade(tower, upgradeType)
+            end
+        end
     end
     
     function player:handleBuilding()
@@ -156,6 +173,7 @@ function players:load()
         left = "a",
         right = "d",
         build = "h",
+        upgrade = "u",
         changeTowerType = "j"
     }
 
