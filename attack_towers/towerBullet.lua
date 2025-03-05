@@ -83,11 +83,11 @@ function towerBullet:shootBullet(tower, target)
         y = tower.y,
         target = target,
         damage = tower.damage,
-        speed = 300,
+        speed = tower.speed,
         dx = 0,
         dy = 0,
         source = "tower"
     }
-    
     table.insert(shoot.bullets, bullet)
 end
+
