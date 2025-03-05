@@ -16,7 +16,7 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.speed = 500
         self.controls = controls
         self.joystick = joystick
-        self.deadZone = 0.2
+        self.deadZone = 0.3
         self.buildPressed = false
         self.upgradePressed = false
         self.cooldownTime = 0.5
@@ -247,6 +247,9 @@ function love.joystickpressed(joystick, button)
     for _, player in ipairs(players) do
         if player.joystick == joystick and (button == "a" or button == 1) then
             player.buildPressed = true
+        end
+        if player.joystick == joystick and (button == "b" or button == 3) then
+            player.upgradePressed = true
         end
         if player.joystick == joystick and (button == "y" or button == 4) then
             player.changeTowerType = true

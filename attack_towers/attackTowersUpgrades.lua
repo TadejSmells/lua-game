@@ -12,6 +12,13 @@ function attackTowersUpgrades:load()
     }
     self.selectedTower = nil
     self.selectedPlayer = nil
+
+    self.images = {
+        fireRate = love.graphics.newImage("attack_towers/fireRate.png"),
+        damage = love.graphics.newImage("attack_towers/damage.png"),
+        range = love.graphics.newImage("attack_towers/range.png"),
+        speed = love.graphics.newImage("attack_towers/speed.png")
+    }
 end
 
 function attackTowersUpgrades:getClosestTower(playerX, playerY)
@@ -39,19 +46,32 @@ function attackTowersUpgrades:isPlayerInRange(playerX, playerY)
 end
 
 function attackTowersUpgrades:draw()
-        if self.selectedTower and self:isPlayerInRange(self.selectedPlayer.x, self.selectedPlayer.y) then
-            self:drawTower(self.selectedTower)
-        else
-            self.selectedTower = nil
-        end
+    if self.selectedTower and self:isPlayerInRange(self.selectedPlayer.x, self.selectedPlayer.y) then
+        self:drawTower(self.selectedTower)
+    else
+        self.selectedTower = nil
+    end
 end
 
 function attackTowersUpgrades:drawTower(tower)
     if not tower then return end
+    love.graphics.setColor(0, 0, 0, 0.3)
+    local radius = 70
+    local centerX, centerY = tower.x, tower.y
+    love.graphics.circle("fill", centerX, centerY, radius)
+
     love.graphics.setColor(255, 255, 255)
-    love.graphics.print("Selected Tower", 10, 10)
-    love.graphics.print("Fire Rate: " .. tower.fireRate, 10, 30)
-    love.graphics.print("Damage: " .. tower.damage, 10, 50)
-    love.graphics.print("Range: " .. tower.radius, 10, 70)
-    love.graphics.print("Speed: " .. tower.speed, 10, 90)
+    local attributes = {"fireRate", "damage", "range", "speed"}
+    local angleStep = (2 * math.pi) / #attributes
+
+    for i, attribute in ipairs(attributes) do
+        local angle = (i - 1) * angleStep
+        local image = self.images[attribute]
+        local imageX = centerX + radius * math.cos(angle) - image:getWidth() / 2
+        local imageY = centerY + radius * math.sin(angle) - image:getHeight() / 2
+        love.graphics.draw(image, imageX, imageY)
+        if tower[attribute] then
+            love.graphics.print(tower[attribute], imageX + image:getWidth() + 5, imageY)
+        end
+    end
 end

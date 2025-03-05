@@ -50,12 +50,12 @@ function love.draw()
         settings:draw()
     elseif gameState == "playing" then
         loadmap:draw()
-        attackTowersUpgrades:draw()
         attackTowers:draw()
         tower:draw()
         enemy:draw()
         shoot:draw()
         players:draw()
+        attackTowersUpgrades:draw()
         if isPaused then 
             pauseMenu:draw()
         end
