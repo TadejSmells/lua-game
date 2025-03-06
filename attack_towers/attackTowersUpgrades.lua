@@ -36,7 +36,7 @@ function attackTowersUpgrades:getClosestTower(playerX, playerY)
 end
 
 function attackTowersUpgrades:upgrade(upgradeType)
-    if self.selectedTower.upgradeCount < 4 and not self.selectedTower.upgrades[upgradeType] then
+    if self.selectedTower.upgradeCount < 6  then
         self.upgradeOptions[upgradeType](self.selectedTower)
         self.selectedTower.upgrades[upgradeType] = true
         self.selectedTower.upgradeCount = self.selectedTower.upgradeCount + 1

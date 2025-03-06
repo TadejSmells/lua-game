@@ -4,8 +4,8 @@ sprite = require("sprite")
 towerBullet.towers = {} -- Store multiple towers with their bullet properties
 
 function towerBullet:spawn(tower)
-    tower.originalWidth = 24
-    tower.originalHeight = 34
+    tower.originalWidth = 48
+    tower.originalHeight = 48
     table.insert(self.towers, tower)
 end
 
@@ -79,7 +79,7 @@ end
 
 function towerBullet:shootBullet(tower, target)
     local bullet = {
-        x = tower.x + tower.originalWidth / 2,
+        x = tower.x ,
         y = tower.y,
         target = target,
         damage = tower.damage,
