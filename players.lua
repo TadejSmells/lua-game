@@ -174,7 +174,11 @@ function players:load()
         right = "d",
         build = "h",
         upgrade = "u",
-        changeTowerType = "j"
+        changeTowerType = "j",
+        upgradeUp = "up",
+        upgradeDown = "down",
+        upgradeLeft = "left",
+        upgradeRight = "right"
     }
 
     if settings.player1Control == "controller" and #joysticks > 0 then

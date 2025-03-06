@@ -136,13 +136,13 @@ function love.keypressed(key, scancode, isrepeat)
                 end
                 if attackTowersUpgrades.inRange then
                     if key == player.controls.upgradeUp then
-                        
+                        attackTowersUpgrades:upgrade("speed")
                     elseif key == player.controls.upgradeRight then
-                        
+                        attackTowersUpgrades:upgrade("fireRate")
                     elseif key == player.controls.upgradeDown then
-                        
+                        attackTowersUpgrades:upgrade("damage")
                     elseif key == player.controls.upgradeLeft then
-                        
+                        attackTowersUpgrades:upgrade("range")
                     end
                 end
             end
