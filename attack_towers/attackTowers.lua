@@ -5,9 +5,6 @@ require("attack_towers.towerBullet")
 function attackTowers:load()
     self.originalWidth = 24
     self.originalHeight = 34
-    self.availableUpgrades = {"fireRate", "damage", "range", "speed"}
-    self.currentUpgradeIndex = 1
-    self.upgradeRange = 50  -- Define how close the player must be to a tower to upgrade it
 end
 
 towers = {}
@@ -38,16 +35,9 @@ attackTowers.towerTypes = {
     ["cannon"] = { 
         width = 16, height = 12, 
         sprite = towers.towerBaseImages["cannon"], 
-        animationSprite = "cannon.png", 
+        animationSprite = "cannon.png",
         fireRate = 3, radius = 400, damage = 2, speed = 250
     }
-}
-
-attackTowers.upgradeOptions = {
-    ["fireRate"] = function(tower) tower.fireRate = tower.fireRate * 0.75 end,
-    ["damage"] = function(tower) tower.damage = tower.damage * 1.5 end,
-    ["range"] = function(tower) tower.radius = tower.radius * 1.25 end,
-    ["speed"] = function(tower) tower.speed = tower.speed + 50 end,
 }
 
 function attackTowers:spawn(x, y, towerType)
@@ -76,19 +66,6 @@ function attackTowers:spawn(x, y, towerType)
     table.insert(towers, tower)
 end
 
-function attackTowers:getClosestTower(playerX, playerY)
-    local closestTower = nil
-    local minDist = attackTowers.upgradeRange
-    for _, tower in ipairs(towers) do
-        local dist = math.sqrt((tower.x - playerX)^2 + (tower.y - playerY)^2)
-        if dist < minDist then
-            minDist = dist
-            closestTower = tower
-        end
-    end
-    return closestTower
-end
-
 function attackTowers:selectNextTower(player)
     if #towers > 0 then
         if not player.selectedTowerIndex then
@@ -99,17 +76,7 @@ function attackTowers:selectNextTower(player)
     end
 end
 
-function attackTowers:cycleUpgrade(player)
-    player.currentUpgradeIndex = (player.currentUpgradeIndex % #self.availableUpgrades) + 1
-end
 
-function attackTowers:upgrade(tower, upgradeType)
-    if tower.upgradeCount < 2 and not tower.upgrades[upgradeType] then
-        self.upgradeOptions[upgradeType](tower)
-        tower.upgrades[upgradeType] = true
-        tower.upgradeCount = tower.upgradeCount + 1
-    end
-end
 
 function attackTowers:update(dt)
     if #towers > 0 then
@@ -117,18 +84,6 @@ function attackTowers:update(dt)
     end
     for _, tower in ipairs(towers) do
         tower.animation:update(dt)
-    end
-end
-
-function attackTowers:handleInput(player)
-    if love.keyboard.isDown("u") then
-        self:upgradeClosestTower(player)
-    end
-    if love.keyboard.isDown("t") then
-        self:selectNextTower(player)
-    end
-    if love.keyboard.isDown("y") then
-        self:cycleUpgrade(player)
     end
 end
 

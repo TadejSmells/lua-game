@@ -11,21 +11,21 @@ function loadmap:load()
     self.currentWave = 1
     self.spawnTimer = 0
     self.waveActive = false 
-    self.waveCooldown = 5
+    self.waveCooldown = 10
     self.waveTimer = 0
 
     self.spawnSettings = {
         [1] = {
-            { waveNumber = 1, spawnInterval = 1, enemies = { pirate_slime = 5, orc = 3 } },
-            { waveNumber = 2, spawnInterval = 1, enemies = { pirate_slime = 10, orc = 5 } },
-            { waveNumber = 3, spawnInterval = 0.5, enemies = { pirate_slime = 8, orc = 6 } },
-            { waveNumber = 4, spawnInterval = 0.9, enemies = { pirate_slime = 9, orc = 4 } },
-            { waveNumber = 5, spawnInterval = 0.8, enemies = { pirate_slime = 10, orc = 6 } },
-            { waveNumber = 6, spawnInterval = 1, enemies = { pirate_slime = 20, orc = 15 } }
+            { waveNumber = 1, spawnInterval = 1, enemies = { pirate_slime = 5, orc = 3, nea = 1 } },
+            { waveNumber = 2, spawnInterval = 1, enemies = { pirate_slime = 10, orc = 5, nea = 1 } },
+            { waveNumber = 3, spawnInterval = 0.5, enemies = { pirate_slime = 8, orc = 6, nea = 1 } },
+            { waveNumber = 4, spawnInterval = 0.9, enemies = { pirate_slime = 9, orc = 4, nea = 1 } },
+            { waveNumber = 5, spawnInterval = 0.8, enemies = { pirate_slime = 10, orc = 6, nea = 1 } },
+            { waveNumber = 6, spawnInterval = 1, enemies = { pirate_slime = 20, orc = 15, nea = 1 } }
         },
         [2] = {
-            { waveNumber = 1, spawnInterval = 3, enemies = { skeleton = 6, zombie = 8 } },
-            { waveNumber = 2, spawnInterval = 3, enemies = { skeleton = 12, zombie = 10 } }
+            { waveNumber = 1, spawnInterval = 3, enemies = { pirate_slime = 6, orc = 8, nea = 1 } },
+            { waveNumber = 2, spawnInterval = 3, enemies = { pirate_slime = 12, orc = 10, nea = 1 } }
         }
     }
 

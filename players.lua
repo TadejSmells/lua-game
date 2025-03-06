@@ -1,6 +1,7 @@
 local sprite = require("sprite")
 players = {}
 
+
 local towerTypes = {"bow", "minigun", "cannon"}
 
 function players:createPlayer(x, y, spriteSheet, controls, joystick)
@@ -15,7 +16,7 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.speed = 500
         self.controls = controls
         self.joystick = joystick
-        self.deadZone = 0.2
+        self.deadZone = 0.3
         self.buildPressed = false
         self.upgradePressed = false
         self.cooldownTime = 0.5
@@ -23,7 +24,6 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
         self.animation = sprite:changeFrames(42, 42, 6, spriteSheet)
         self.currentTowerType = 1
         self.changeTowerType = false
-        self.currentUpgradeIndex = 1
     end
 
     function player:update(dt)
@@ -97,12 +97,10 @@ function players:createPlayer(x, y, spriteSheet, controls, joystick)
 
     function player:upgradeClosestTower()
         if self.upgradePressed then
-            local newY = 15
-            local tower = attackTowers.getClosestTower(self.x, newY)
-            -- local tower = attackTowers.getClosestTower(self.x, self.y)
+            local tower = attackTowersUpgrades:getClosestTower(self.x, self.y)
             if tower then
-                local upgradeType = self.availableUpgrades[player.currentUpgradeIndex]
-                self:upgrade(tower, upgradeType)
+                attackTowersUpgrades:showUpgradeMenu(tower, self)
+                
             end
         end
     end
@@ -250,8 +248,22 @@ function love.joystickpressed(joystick, button)
         if player.joystick == joystick and (button == "a" or button == 1) then
             player.buildPressed = true
         end
+        if player.joystick == joystick and (button == "b" or button == 3) then
+            player.upgradePressed = true
+        end
         if player.joystick == joystick and (button == "y" or button == 4) then
             player.changeTowerType = true
+        end
+        if attackTowersUpgrades.inRange then
+            if player.joystick == joystick and (button == "up" or button == 12) then
+                attackTowersUpgrades:upgrade("speed")
+            elseif player.joystick == joystick and (button == "down" or button == 13) then
+                attackTowersUpgrades:upgrade("damage")
+            elseif player.joystick == joystick and (button == "left" or button == 14) then
+                attackTowersUpgrades:upgrade("range")
+            elseif player.joystick == joystick and (button == "right" or button == 15) then
+                attackTowersUpgrades:upgrade("fireRate")
+            end
         end
     end
 end
